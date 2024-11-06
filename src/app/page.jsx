@@ -41,7 +41,7 @@ export default function Home() {
     </div>
 
     <Container flexDirection="column" alignItems="center" gap="50px" paddingTop="100px">
-      <H2>Selection d'avis sur les outils</H2>
+      <H2>Selection d&aposavis sur les outils</H2>
       <WrapperRow width="100%" justifyContent="center" gap="20px" wrap="wrap">
         {avis.map(avis => (
             <OutilAvisCard 

@@ -24,7 +24,7 @@ export default function Outils() {
   return (
     <main className={styles.main}>
         <Container flexDirection="column" alignItems="center" gap="50px" paddingTop="100px">
-            <H2>Selection d'outils sur les outils</H2>
+            <H2>Selection d&aposoutils sur les outils</H2>
             <WrapperRow width="100%" justifyContent="center" gap="20px" wrap="wrap">
                 {outils.map(outils => (
                     <OutilCard 
