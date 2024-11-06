@@ -15,7 +15,7 @@ import InputButton from "@/components/Atoms/Input/InputButton";
 import Cookies from 'js-cookie';
 import { useAuth } from "@/context/AuthContext";
 
-export default function Connexion() {
+const Connexion = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState(''); 
@@ -60,3 +60,5 @@ export default function Connexion() {
     </main>
   );
 }
+
+export default Connexion;

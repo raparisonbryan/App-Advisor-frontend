@@ -13,7 +13,7 @@ import Mask from "@/components/Atoms/Mask/Mask";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function Home() {
+const Home = () => {
   const [avis, setAvis] = useState([]);
 
   useEffect(() => {
@@ -60,3 +60,5 @@ export default function Home() {
   </main>
   );
 }
+
+export default Home;

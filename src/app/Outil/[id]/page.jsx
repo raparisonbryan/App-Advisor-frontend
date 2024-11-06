@@ -23,7 +23,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import InputButton from '@/components/Atoms/Input/InputButton';
 
-export default function OutilDetail({ params: {id} }) {
+const OutilDetail = ({ params: {id} }) => {
     const nbAvis = 12;
     const categorie = "Développement web";
     const [message, setMessage] = useState('');
@@ -214,3 +214,5 @@ export default function OutilDetail({ params: {id} }) {
         </main>
     );
 }
+
+export default OutilDetail;

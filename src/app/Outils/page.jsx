@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import styles from './page.module.scss';
 
-export default function Outils() {
+const Outils = () => {
     const [outils, setOutils] = useState([]);
 
     useEffect(() => {
@@ -40,3 +40,5 @@ export default function Outils() {
     </main>
   );
 }
+
+export default Outils;

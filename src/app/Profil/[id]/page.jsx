@@ -13,7 +13,7 @@ import SecondaryBtn from "@/components/Atoms/Button/SecondaryBtn";
 import Cookies from 'js-cookie';
 import { useAuth } from "@/context/AuthContext";
 
-export default function Profil({ params: {id} }) {
+const Profil = ({ params: {id} }) => {
   const [userProfil, setUserProfil] = useState({ name: '', email: '' });
   const { setUser } = useAuth();
 
@@ -81,3 +81,4 @@ export default function Profil({ params: {id} }) {
   );
 }
 
+export default Profil;

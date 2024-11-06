@@ -11,7 +11,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function Inscription() {
+const Inscription = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -54,3 +54,5 @@ export default function Inscription() {
     </main>
   );
 }
+
+export default Inscription;

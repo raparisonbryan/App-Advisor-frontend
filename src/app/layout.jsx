@@ -10,7 +10,7 @@ export const metadata = {
     "Site web pour trouver des avis et informations sur des applications informatiques",
 };
 
-export default function RootLayout({ children }) {
+const RootLayout = ({ children }) => {
 
   return (
     <html lang="fr">
@@ -26,4 +26,5 @@ export default function RootLayout({ children }) {
   );
 }
 
+export default RootLayout;
 
