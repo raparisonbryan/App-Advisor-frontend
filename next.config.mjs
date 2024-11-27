@@ -1,4 +1,4 @@
-// next.config.js
-export const images = {
-  domains: ["upload.wikimedia.org"],
-};
+/** @type {import('next').NextConfig} */
+const nextConfig = {};
+
+export default nextConfig;
