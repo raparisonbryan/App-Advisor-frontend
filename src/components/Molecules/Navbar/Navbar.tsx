@@ -1,4 +1,3 @@
-// @ts-ignore
 import logo from '@/assets/logo.png';
 import Link from 'next/link';
 import Button from '@/components/Atoms/Button/Button';
@@ -10,13 +9,16 @@ import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import styles from './Navbar.module.scss';
 import WrapperRow from '@/components/Atoms/Wrapper/WrapperRow';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from 'next/navigation';
+import {MoonOutlined, SunOutlined} from "@ant-design/icons";
 
 export default function Navbar() {
     const [mounted, setMounted] = useState(false);
     const { resolvedTheme, setTheme } = useTheme();
     const { user } = useAuth();
     const userId = user ? user.id : null;
+    const router = useRouter();
 
     useEffect(() => {
         setMounted(true);
@@ -34,17 +36,20 @@ export default function Navbar() {
             <List>
                 <LinkItem href="/">Accueil</LinkItem>
                 {/*<LinkItem href="/Categories">Catégories</LinkItem>*/}
-                <LinkItem href="/Outils">Outils</LinkItem>
+                <LinkItem href="/outils">Outils</LinkItem>
                 {/*<LinkItem href="/Statistiques">Statistiques</LinkItem>*/}
             </List>
             <WrapperRow gap="20px">
                 {user ? (
-                    <Button text="Profil" link={`/Profil/${userId}`} />
+                    <Button onClick={() => router.push(`/Profil/${userId}`)}>Profil</Button>
                 ) : (
-                    <Button text="Connexion" link="/Connexion" />
+                    <Button onClick={() => router.push("/connexion")}>Connexion</Button>
                 )}
-                <button className={styles.button} onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")}>
-                    {resolvedTheme === "light" ? "☀️" : "🌙"}
+                <button className={styles.icon} onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")}>
+                    {resolvedTheme === "light"
+                        ? <SunOutlined />
+                        : <MoonOutlined />
+                    }
                 </button>
             </WrapperRow>
         </Container>

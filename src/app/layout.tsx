@@ -2,7 +2,7 @@ import Header from "@/components/Organisms/Header/Header";
 import "./globals.scss";
 import "@/styles/index.scss";
 import { ThemeProvider } from 'next-themes';
-import { AuthProvider } from "@/context/AuthContext";
+import AppProvider from "@/providers/providers";
 import {ReactNode} from "react";
 
 export const metadata = {
@@ -18,13 +18,13 @@ export interface RootLayoutProps {
 const RootLayout = (props: RootLayoutProps) => {
 
   return (
-    <html lang="fr">
+    <html lang="fr" suppressHydrationWarning={true}>
       <body>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem >
-          <AuthProvider>
-            <Header />
-            {props.children}
-          </AuthProvider>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+            <AppProvider>
+                <Header />
+                {props.children}
+            </AppProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -2,7 +2,6 @@
 
 import styles from "./page.module.scss";
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
-import axios from 'axios';
 import Container from '@/components/Atoms/Container/Container';
 import Wrapper from '@/components/Atoms/Wrapper/Wrapper';
 import WrapperRow from "@/components/Atoms/Wrapper/WrapperRow";
@@ -12,34 +11,28 @@ import InputText from "@/components/Atoms/Input/InputText";
 import SecondaryBtn from "@/components/Atoms/Button/SecondaryBtn";
 import Cookies from "js-cookie";
 import { useAuth } from "@/context/AuthContext";
+import { User } from "@/types/User";
+import {useParams, useRouter} from "next/navigation";
 
-interface UserProfile {
-  name: string;
-  email: string;
-}
-
-interface ProfilProps {
-  params: {
-    id: string;
-  };
-}
-
-const Profil = ({ params: { id } }: ProfilProps) => {
-  const [userProfil, setUserProfil] = useState<UserProfile>({ name: '', email: '' });
+const Profil = () => {
+  const params = useParams<{ id: string }>();
+  const [userProfil, setUserProfil] = useState<User>({ name: '', email: '' });
   const { setUser } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     const chargerProfil = async () => {
       try {
-        const reponse = await axios.get(`http://localhost:3000/user/${id}`);
-        setUserProfil(reponse.data);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/${params.id}`);
+        const data = await response.json();
+        setUserProfil(data);
       } catch (erreur) {
         console.error("Erreur lors de la récupération de l'utilisateur:", erreur);
       }
     };
 
     chargerProfil();
-  }, [id]);
+  }, [params.id]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -52,8 +45,19 @@ const Profil = ({ params: { id } }: ProfilProps) => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:3000/user/${id}`, userProfil);
-      alert('Profil mis à jour avec succès!');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/${params.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userProfil),
+      });
+
+      if (!response.ok) {
+        new Error('Une erreur est survenue lors de la mise à jour du profil');
+      }
+
+      alert('profil mis à jour avec succès!');
     } catch (erreur) {
       console.error("Erreur lors de la mise à jour de l'utilisateur:", erreur);
     }
@@ -62,12 +66,12 @@ const Profil = ({ params: { id } }: ProfilProps) => {
   const handleLogout = () => {
     Cookies.remove('token');
     setUser(null);
-    alert('Vous êtes déconnecté.');
+    router.push('/connexion');
   };
 
   return (
     <main>
-      <Container id="avis" justifyContent="center" paddingTop="100px">
+      <Container justifyContent="center" alignItems="center" paddingTop="100px" height="100vh">
         <div className={styles.form_wrapper}>
           <H2>Profil</H2>
           <form className={styles.form} onSubmit={handleSubmit}>
@@ -81,7 +85,7 @@ const Profil = ({ params: { id } }: ProfilProps) => {
                 </Wrapper>
                 <WrapperRow justifyContent="center" width="max-content" gap="10px">
                   <InputButton text="Valider" />
-                  <SecondaryBtn link="/Connexion" text="Se déconnecter" onClick={handleLogout} />
+                  <SecondaryBtn onClick={handleLogout}>Se déconnecter</SecondaryBtn>
                 </WrapperRow>
               </Wrapper>
             </WrapperRow>

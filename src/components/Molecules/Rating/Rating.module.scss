@@ -1,2 +1,12 @@
 @import "@/styles/index.scss";
 
+.ratingContainer {
+  display: flex;
+  align-items: center;
+}
+
+.starWrapper {
+  display: inline-block;
+  position: relative;
+  color: var(--orange);
+}

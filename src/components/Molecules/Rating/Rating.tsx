@@ -1,49 +1,40 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar, faStarHalfAlt } from '@fortawesome/free-solid-svg-icons';
-import { faStar as farFaStar } from '@fortawesome/free-regular-svg-icons';
+import StarFull from "@/components/Atoms/stars/StarFull";
+import StarHalf from "@/components/Atoms/stars/StarHalf";
+import StarEmpty from "@/components/Atoms/stars/StarEmpty";
+import styles from "./Rating.module.scss";
 
 interface RatingProps {
   note: number;
   starSize: string | number;
 }
 
-const Rating = ({ note, starSize }: RatingProps) => {
-  const baseStars = Math.floor(note);
-  const decimalPart = note % 1;
-  let fullStars, halfStar, emptyStars;
-
-  if (decimalPart > 0.5) {
-    fullStars = baseStars + 1;
-    halfStar = 0;
-  } else if (decimalPart > 0) {
-    fullStars = baseStars;
-    halfStar = 1;
-  } else {
-    fullStars = baseStars;
-    halfStar = 0;
-  }
-
-  emptyStars = 5 - fullStars - halfStar;
+const Rating = ({ note, starSize = 24 }: RatingProps) => {
+  const safeNote = Math.max(0, Math.min(5, note));
+  const fullStars = Math.floor(safeNote);
+  const hasHalfStar = safeNote % 1 >= 0.5;
+  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
   return (
-    <div style={{ display: 'flex' }}>
-      {[...Array(fullStars)].map((_, i) => (
-        <span style={{ width: starSize }} key={`full-${i}`}>
-          <FontAwesomeIcon icon={faStar} />
+      <div className={styles.ratingContainer}>
+        {[...Array(fullStars)].map((_, i) => (
+            <span className={styles.starWrapper} key={`full-${i}`}>
+          <StarFull size={Number(starSize)} />
         </span>
-      ))}
-      {halfStar > 0 && (
-        <span style={{ width: starSize }} key="half">
-          <FontAwesomeIcon icon={faStarHalfAlt} />
+        ))}
+
+        {hasHalfStar && (
+            <span className={styles.starWrapper} key="half">
+          <StarHalf size={Number(starSize)} />
         </span>
-      )}
-      {[...Array(emptyStars)].map((_, i) => (
-        <span style={{ width: starSize }} key={`empty-${i}`}>
-          <FontAwesomeIcon icon={farFaStar} />
+        )}
+
+        {[...Array(emptyStars)].map((_, i) => (
+            <span className={styles.starWrapper} key={`empty-${i}`}>
+          <StarEmpty size={Number(starSize)} />
         </span>
-      ))}
-    </div>
+        ))}
+      </div>
   );
-}
+};
 
 export default Rating;

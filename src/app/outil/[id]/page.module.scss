@@ -1,0 +1,19 @@
+@import "@/styles/index.scss";
+
+.main {
+  padding-bottom: 150px;
+}
+
+.button {
+  background-color: $orange;
+  color: white;
+  border-radius: 6px;
+  padding: 10px 25px;
+  border: 2px solid $orange;
+  width: max-content;
+  min-width: 125px;
+}
+
+.avis_wrapper {
+  width: 100%;
+}

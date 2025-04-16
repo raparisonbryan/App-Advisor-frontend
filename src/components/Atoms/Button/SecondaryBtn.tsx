@@ -1,17 +1,14 @@
-import Link from 'next/link';
 import styles from './Button.module.scss';
+import React from "react";
 
 export interface SecondaryButtonProps {
-    text: string;
     onClick?: () => void;
-    link: string;
+    children?: React.ReactNode;
 }
 
 const SecondaryBtn = (props: SecondaryButtonProps) => {
     return (
-        <Link href={props.link}>
-            <button className={styles.secondaryBtn} onClick={props.onClick}>{props.text}</button>
-        </Link>
+        <button type="button" className={styles.secondaryBtn} onClick={props.onClick}>{props.children}</button>
     )
 }
 

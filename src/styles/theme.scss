@@ -1,28 +1,37 @@
 $darkblue: #181E4B;
-$nightblue: #050560;
 $orange: #DF6951;
 $padding: 80%;
+$orangeHover: #dc7765;
+$hover : #EBEBEB;
 
 .light {
     --background-color: #fff;
     --text-card-color: #181E4B;
     --title-color: #181E4B;
     --text-color: #181E4B;
+    --text-color-reversed: #fff;
     --card-color: #fff;
-    --header-color: #050560;
+    --header-color: #0F3B4D;
     --button-theme: #fff; 
-    --image-color: #181E4B; 
-    --avis-card-color: #EDEDED;
+    --image-color: #0F3B4D;
+    --orange: #DF6951;
+    --orange-dark: #DF6951;
+    --theme-border: white;
+    --input-background: white;
   }
   
 .dark {
-    --background-color: #2A324B;
+    --background-color: #00141b;
     --text-card-color: #fff;
     --title-color: #fff;
     --text-color: #fff;
-    --card-color: #181E4B;
-    --header-color: #181E4B;
+    --text-color-reversed: #181E4B;
+    --card-color: #0F3B4D;
+    --header-color: #0F3B4D;
     --button-theme: #000;
-    --image-color: #EDEDED;
-    --avis-card-color: #181E4B;
+    --image-color: #0F3B4D;
+    --orange: white;
+    --orange-dark: #181E4B;
+    --input-background: #2a5a6c;
+    --theme-border: white;
 }

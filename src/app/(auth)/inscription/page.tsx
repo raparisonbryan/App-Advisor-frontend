@@ -7,7 +7,6 @@ import H2 from "@/components/Atoms/Title/H2/H2";
 import Wrapper from "@/components/Atoms/Wrapper/Wrapper";
 import LoginCard from "@/components/Atoms/Card/LoginCard";
 import InputButton from "@/components/Atoms/Input/InputButton";
-import axios from 'axios';
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -23,17 +22,24 @@ const Inscription = () => {
     setErrorMsg('');
 
     try {
-      const response = await axios.post('http://localhost:3000/user/signup', {
-        name,
-        email,
-        password,
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/user/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email, password }),
       });
-      console.log(response.data);
-      router.push('/Connexion');
-      alert('Inscription réussie');
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        new Error(errorData.msg || "Une erreur est survenue lors de l'inscription");
+      }
+
+      router.push('/connexion');
+      alert('inscription réussie');
     } catch (error: any) {
-      console.error("Erreur d'inscription", error.response);
-      const message = error.response && error.response.data ? error.response.data.msg : "Une erreur est survenue lors de l'inscription";
+      console.error("Erreur d'inscription", error);
+      const message = error.message || "Une erreur est survenue lors de l'inscription";
       setErrorMsg(message);
     }
   };

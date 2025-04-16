@@ -1,17 +1,14 @@
-import Link from 'next/link';
 import styles from './Button.module.scss';
+import React from "react";
 
 export interface ButtonProps {
-    text: string;
+    children?: React.ReactNode;
     onClick?: () => void;
-    link: string;
 }
 
 const Button = (props: ButtonProps) => {
     return (
-        <Link href={props.link}>
-            <button className={styles.button} onClick={props.onClick}>{props.text}</button>
-        </Link>
+        <button className={styles.button} onClick={props.onClick}>{props.children}</button>
     )
 }
 

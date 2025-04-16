@@ -1,0 +1,20 @@
+@import '@/styles/index.scss';
+
+.form_wrapper {
+    padding: 20px 50px;
+    width: 70%;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    background-color: var(--card-color);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form {
+    width: 100%;
+}
+
+  

@@ -7,6 +7,7 @@ import Separator from "@/components/Atoms/Separator/Separator";
 import Wrapper from "@/components/Atoms/Wrapper/Wrapper";
 import WrapperRow from "@/components/Atoms/Wrapper/WrapperRow";
 import H3 from "@/components/Atoms/Title/H3/H3";
+import {useRouter} from "next/navigation";
 
 interface OutilAvisCardProps {
   image: string;
@@ -19,13 +20,16 @@ interface OutilAvisCardProps {
 }
 
 const OutilAvisCard = (props: OutilAvisCardProps) => {
+  const router = useRouter();
   const { image, nom, avis, note, starSize, nomUtilisateur, outilId } = props;
 
   return (
     <Card>
-      <Img src={image} height={175} width="100%" objectFit="scale-down" />
+      <Wrapper padding="20px" width="100%">
+        <Img src={image} height={175} width="100%" objectFit="scale-down" />
+      </Wrapper>
       <Separator />
-      <Wrapper justifyContent="space-between" height="60%" padding="20px" width="100%">
+      <Wrapper justifyContent="space-between" height="60%" padding="20px" width="100%" gap="20px">
         <Wrapper gap="20px">
           <WrapperRow alignItems="center" justifyContent="space-between">
             <H3>{nom}</H3>
@@ -40,7 +44,7 @@ const OutilAvisCard = (props: OutilAvisCardProps) => {
           </WrapperRow>
           <Elipse>{avis}</Elipse>
         </Wrapper>
-        <Button text="Voir plus" link={`/Outil/${outilId}`} />
+        <Button onClick={() => router.push(`/outil/${outilId}`)}>Voir plus</Button>
       </Wrapper>
     </Card>
   );

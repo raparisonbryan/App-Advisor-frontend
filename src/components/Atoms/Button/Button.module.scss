@@ -3,19 +3,29 @@
 .button {
     background-color: $orange;
     color: white;
-    border-radius: 10px;
+    border-radius: 6px;
     padding: 10px 25px;
-    border: 2px solid $orange;
+    border: 1px solid $orange;
     width: max-content;
     min-width: 125px;
+
+    &:hover {
+        background-color: $orangeHover;
+        border: 1px solid $orangeHover;
+    }
 }
 
 .secondaryBtn {
     background-color: transparent;
-    color: $orange;
-    border-radius: 10px;
+    color: var(--orange);
+    border-radius: 6px;
     padding: 10px 25px;
-    border: 2px solid $orange;
+    border: 1px solid var(--orange);
     width: max-content;
     min-width: 125px;
+
+    &:hover {
+        background-color: $hover;
+        color: var(--orange-dark);
+    }
 }

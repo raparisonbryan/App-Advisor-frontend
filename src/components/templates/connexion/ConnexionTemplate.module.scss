@@ -1,0 +1,14 @@
+@import "@/styles/index.scss";
+
+.main {
+  background-image: url("/Hero.webp");
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.errorMsg {
+  color: red;
+  text-align: center;
+}

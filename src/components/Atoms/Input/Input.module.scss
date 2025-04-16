@@ -2,12 +2,17 @@
 
 .input {
     width: 100%;
-    padding: 10px;
-    border: 1px solid $nightblue;
-    color: $nightblue;
+    padding: 8px 10px;
+    border: 1px solid var(--header-color);
+    color: var(--text-color);
+    background: var(--input-background);
     border-radius: 5px;
     margin: 5px 0;
     font-size: 16px;
+
+    &::placeholder {
+        color: var(--text-color);
+    }
 }
 
 .label_wrapper {
@@ -26,7 +31,6 @@
     border-radius: 5px;
 }
 
-/* Style pour Chrome, Safari, et Edge */
 .range::-webkit-slider-thumb {
     -webkit-appearance: none; 
     appearance: none;
@@ -66,21 +70,28 @@
 }
 
 .message {
-    min-width: 300px;
+    resize: none;
     min-height: 100px;
     width: 100%;
     padding: 10px;
-    border: none;
     border-radius: 5px;
+    color: $darkblue;
+    background: white;
+    border: 1px solid var(--input-background);
 }
 
 .button {
     background-color: $orange;
     color: white;
-    border-radius: 10px;
+    border-radius: 6px;
     padding: 10px 25px;
-    border: 2px solid $orange;
+    border: 1px solid $orange;
     width: max-content;
     min-width: 125px;
     cursor: pointer;
+
+    &:hover {
+        background-color: $orangeHover;
+        border: 1px solid $orangeHover;
+    }
 }
