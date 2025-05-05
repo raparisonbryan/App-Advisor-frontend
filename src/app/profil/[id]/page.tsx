@@ -17,11 +17,11 @@ import {useParams, useRouter} from "next/navigation";
 const Profil = () => {
   const params = useParams<{ id: string }>();
   const [userProfil, setUserProfil] = useState<User>({ name: '', email: '' });
-  const { setUser } = useAuth();
+  const { logout } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    const chargerProfil = async () => {
+    const loadProfil = async () => {
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/${params.id}`);
         const data = await response.json();
@@ -31,7 +31,7 @@ const Profil = () => {
       }
     };
 
-    chargerProfil();
+    loadProfil();
   }, [params.id]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -63,9 +63,9 @@ const Profil = () => {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     Cookies.remove('token');
-    setUser(null);
+    await logout();
     router.push('/connexion');
   };
 
