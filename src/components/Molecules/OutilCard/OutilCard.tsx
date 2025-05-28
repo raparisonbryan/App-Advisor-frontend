@@ -6,18 +6,16 @@ import Separator from "@/components/Atoms/Separator/Separator";
 import Wrapper from "@/components/Atoms/Wrapper/Wrapper";
 import WrapperRow from "@/components/Atoms/Wrapper/WrapperRow";
 import H3 from "@/components/Atoms/Title/H3/H3";
-import {useRouter} from "next/navigation";
 
 interface OutilCardProps {
     image: string;
     nom: string;
-    description: string;
-    outilId: string;
+    description?: string;
+    onClick?: () => void;
 }
 
 const OutilCard = (props: OutilCardProps) => {
-    const { image, nom, description, outilId } = props;
-    const router = useRouter();
+    const { image, nom, description, onClick } = props;
 
     return (
         <Card>
@@ -32,7 +30,7 @@ const OutilCard = (props: OutilCardProps) => {
                     </WrapperRow>
                     <Elipse>{description}</Elipse>
                 </Wrapper>
-                <Button onClick={() => router.push(`/outil/${outilId}`)}>Voir plus</Button>
+                <Button onClick={onClick}>Voir plus</Button>
             </Wrapper>
         </Card>
     );

@@ -35,7 +35,7 @@ export default function Navbar() {
             </Link>
             <List>
                 <LinkItem href="/">Accueil</LinkItem>
-                {/*<LinkItem href="/Categories">Catégories</LinkItem>*/}
+                <LinkItem href="/categories">Catégories</LinkItem>
                 <LinkItem href="/outils">Outils</LinkItem>
                 {/*<LinkItem href="/Statistiques">Statistiques</LinkItem>*/}
             </List>

@@ -88,7 +88,7 @@ const Modal = ({ isOpen, onClose, outilId }: ModalProps) => {
             });
 
             if (!response.ok) {
-                new Error('Erreur lors de la soumission de l\'avis');
+                throw new Error('Erreur lors de la soumission de l\'avis');
             }
 
             console.log("Avis soumis avec succès!");
@@ -168,7 +168,7 @@ const Modal = ({ isOpen, onClose, outilId }: ModalProps) => {
                     ) : (
                         <div className={styles.login_prompt}>
                             <p className={styles.text}>Vous devez être connecté pour donner un avis</p>
-                            <Button onClick={() => router.push('/login')}>Se connecter</Button>
+                            <Button onClick={() => router.push('/connexion')}>Se connecter</Button>
                         </div>
                     )}
                 </div>

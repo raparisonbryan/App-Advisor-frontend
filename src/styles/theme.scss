@@ -5,7 +5,7 @@ $orangeHover: #dc7765;
 $hover : #EBEBEB;
 
 .light {
-    --background-color: #fff;
+    --background-color: #f5f5fa;
     --text-card-color: #181E4B;
     --title-color: #181E4B;
     --text-color: #181E4B;
@@ -18,20 +18,24 @@ $hover : #EBEBEB;
     --orange-dark: #DF6951;
     --theme-border: white;
     --input-background: white;
+    --border-color: white;
+    --header-border: #0F3B4D;
   }
   
 .dark {
-    --background-color: #00141b;
+    --background-color: #09090B;
     --text-card-color: #fff;
     --title-color: #fff;
     --text-color: #fff;
     --text-color-reversed: #181E4B;
-    --card-color: #0F3B4D;
-    --header-color: #0F3B4D;
+    --card-color: rgba(38, 38, 38, 0.25);
+    --header-color: black;
     --button-theme: #000;
     --image-color: #0F3B4D;
     --orange: white;
     --orange-dark: #181E4B;
     --input-background: #2a5a6c;
     --theme-border: white;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --header-border: rgba(255, 255, 255, 0.1);
 }
