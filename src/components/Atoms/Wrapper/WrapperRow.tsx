@@ -9,6 +9,7 @@ interface WrapperRowProps {
   padding?: string;
   gap?: string;
   wrap?: "wrap" | "nowrap" | "wrap-reverse";
+  className?: string;
 }
 
 const WrapperRow = (props: WrapperRowProps) => {
@@ -25,7 +26,9 @@ const WrapperRow = (props: WrapperRowProps) => {
       padding: padding,
       gap: gap,
       flexWrap: wrap
-    }}>
+    }}
+    className={props.className}
+    >
       {children}
     </div>
   );

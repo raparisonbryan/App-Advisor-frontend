@@ -2,8 +2,241 @@
 
 .main {
     padding-bottom: 150px;
+    background: var(--background-color);
+    min-height: 100vh;
+    transition: background-color 0.3s ease;
 }
 
-.avis_wrapper {
+.header {
+    text-align: center;
+    max-width: 600px;
+
+    .subtitle {
+        margin-top: 16px;
+        font-size: 16px;
+        color: var(--text-color);
+        font-weight: 400;
+    }
+}
+
+.categories_grid {
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.category_card {
+    background: var(--card-color);
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.category_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.category_title {
+    color: var(--title-color);
+    font-size: 24px;
+}
+
+.tools_counter {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--card-color);
+    padding: 8px 16px;
+    border-radius: 50px;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+
+    .counter_number {
+        font-weight: 700;
+        font-size: 16px;
+        color: var(--orange);
+    }
+
+    .counter_text {
+        font-size: 14px;
+        color: var(--counter-text);
+        text-transform: lowercase;
+    }
+}
+
+.tools_wrapper {
+    overflow-x: auto;
+    padding-bottom: 20px;
+    -webkit-overflow-scrolling: touch;
+    gap: 20px;
+
+    &::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: var(--counter-bg);
+        border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: var(--scrollbar-color);
+        border-radius: 4px;
+        transition: background 0.3s ease;
+    }
+}
+
+.tool_card {
+    min-width: 180px;
+    background: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+
+    &:hover {
+        background: var(--card-hover);
+    }
+}
+
+.tool_image_container {
     width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--counter-bg);
+    border-radius: 8px;
+    padding: 8px;
+    transition: all 0.3s ease;
+
+    .tool_image {
+        transition: transform 0.3s ease;
+    }
+}
+
+.tool_name {
+    font-weight: 600;
+    color: var(--text-card-color);
+    text-align: center;
+    font-size: 14px;
+}
+
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 60px;
+    text-align: center;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border-color);
+    border-top: 3px solid var(--orange);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .category_card {
+        padding: 24px 20px;
+    }
+
+    .category_header {
+        flex-wrap: nowrap;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .tools_counter {
+        align-self: flex-end;
+        padding: 4px 12px;
+    }
+
+    .tool_card {
+        min-width: 160px;
+        padding: 16px;
+    }
+
+    .category_title {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main {
+        padding-bottom: 100px;
+    }
+
+    .category_card {
+        padding: 20px 16px;
+        margin: 0 16px;
+    }
+
+    .tool_card {
+        min-width: 140px;
+        padding: 12px;
+    }
+}
+
+/* Animations */
+.fadeIn {
+    animation: fadeIn 0.6s ease-out both;
+}
+
+.slideIn {
+    animation: slideIn 0.4s ease-out both;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
 }

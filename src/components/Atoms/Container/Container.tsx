@@ -11,6 +11,7 @@ export interface ContainerProps {
     padding?: string;
     paddingTop?: string;
     gap?: string;
+    className?: string;
 }
 
 const Container = (props: ContainerProps) => {
@@ -25,7 +26,7 @@ const Container = (props: ContainerProps) => {
             gap: props.gap,
             }} 
             id={props.id}
-            className={styles.container}>
+            className={`${styles.container} ${props.className}`}>
             {props.children}
         </div>
     )

@@ -9,6 +9,7 @@ export interface WrapperProps {
     padding?: CSSProperties["padding"];
     gap?: CSSProperties["gap"];
     zIndex?: CSSProperties["zIndex"];
+    className?: string;
 }
 
 const Wrapper = (props: WrapperProps) => {
@@ -24,7 +25,9 @@ const Wrapper = (props: WrapperProps) => {
             gap: props.gap,
             position: "relative",
             zIndex: props.zIndex
-        }}>
+        }}
+        className={props.className}
+        >
             {props.children}
         </div>
     );
