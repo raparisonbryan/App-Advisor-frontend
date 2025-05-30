@@ -13,6 +13,7 @@ import Mask from "@/components/Atoms/Mask/Mask";
 import {Col, Row} from "antd";
 import { Avis } from "@/types/Avis";
 import { fetchRandomAvis } from "@/services/AvisService";
+import heroBg from "@/assets/Hero.webp";
 
 const HomeTemplate = () => {
     const { data, isLoading, isError, error } = useQuery({
@@ -22,11 +23,11 @@ const HomeTemplate = () => {
             return data.sort(() => 0.5 - Math.random()).slice(0, 3);
         }
     });
-    const avis: Avis[] = data || [];
+    const avis: Avis[] = data ?? [];
 
     return (
         <main className={styles.main}>
-            <div className={styles.hero}>
+            <div className={styles.hero} style={{ backgroundImage: `url(${heroBg.src})` }}>
                 <Mask backgroundColor="rgba(0, 0, 0, 0.5)"/>
                 <div className={styles.hero_container}>
                     <Img src={zigzag} width={70} height={15} objectFit="cover"/>
