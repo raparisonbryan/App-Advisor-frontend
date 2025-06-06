@@ -12,18 +12,33 @@ import Container from "@/components/Atoms/Container/Container";
 import Mask from "@/components/Atoms/Mask/Mask";
 import {Col, Row} from "antd";
 import { Avis } from "@/types/Avis";
+import { Categorie } from "@/types/Categorie";
 import { fetchRandomAvis } from "@/services/AvisService";
+import { fetchCategories} from "@/services/CatégorieService";
 import heroBg from "@/assets/Hero.webp";
+import Loading from "@/components/Molecules/Loading/Loading";
+import Button from "@/components/Atoms/Button/Button";
+import WrapperRow from "@/components/Atoms/Wrapper/WrapperRow";
+import H3 from "@/components/Atoms/Title/H3/H3";
+import { getCategoryIcon } from "@/components/Atoms/Icons/CategoryIcons";
 
 const HomeTemplate = () => {
-    const { data, isLoading, isError, error } = useQuery({
+    const { data: avisData, isLoading: isAvisLoading } = useQuery({
         queryKey: ['avis'],
         queryFn: fetchRandomAvis,
         select: (data) => {
             return data.sort(() => 0.5 - Math.random()).slice(0, 3);
         }
     });
-    const avis: Avis[] = data ?? [];
+    const avis: Avis[] = avisData ?? [];
+
+    const {data: categorieData, isLoading: IsCategorieLoading} = useQuery({
+        queryKey: ['categories'],
+        queryFn: fetchCategories,
+        refetchOnWindowFocus: false,
+        refetchOnMount: false,
+    });
+    const categories: Categorie[] = categorieData ?? [];
 
     return (
         <main className={styles.main}>
@@ -36,30 +51,70 @@ const HomeTemplate = () => {
                 </div>
             </div>
 
-            <Container flexDirection="column" alignItems="center" gap="50px" paddingTop="100px">
-                <H2>Selection d&apos;avis sur les outils</H2>
+            <div className={styles.section}>
+                <Container flexDirection="column" alignItems="center" gap="50px" paddingTop="100px">
+                    <H2>Sélection d&apos;avis sur les outils</H2>
 
-                {isLoading && <div>Chargement des avis...</div>}
-                {isError && <div>Erreur: {error?.message || "Une erreur est survenue"}</div>}
+                    {isAvisLoading ? (
+                        <Loading />
+                    ) : (
+                        <Row gutter={[16, 16]} className={styles.avis_wrapper}>
+                            {avis.map(avis => (
+                                <Col key={avis._id} span={24} sm={12} lg={8}>
+                                    <OutilAvisCard
+                                        image={avis.outils.imageURL}
+                                        nom={avis.outils.name}
+                                        avis={avis.message}
+                                        note={avis.note}
+                                        starSize={20}
+                                        nomUtilisateur={avis.user.name}
+                                        outilId={avis.outils._id}
+                                    />
+                                </Col>
+                            ))}
+                        </Row>
+                    )}
+                </Container>
 
-                {!isLoading && !isError && (
-                    <Row gutter={[16, 16]} className={styles.avis_wrapper}>
-                        {avis.map(avis => (
-                            <Col key={avis._id} span={24} sm={12} lg={8}>
-                                <OutilAvisCard
-                                    image={avis.outils.imageURL}
-                                    nom={avis.outils.name}
-                                    avis={avis.message}
-                                    note={avis.note}
-                                    starSize={20}
-                                    nomUtilisateur={avis.user.name}
-                                    outilId={avis.outils._id}
-                                />
-                            </Col>
-                        ))}
-                    </Row>
-                )}
-            </Container>
+                <Container flexDirection="column" alignItems="center" gap="60px" paddingTop="100px">
+                    <H2>Explorez les catégories</H2>
+
+                    {IsCategorieLoading ? (
+                        <Loading />
+                    ) : (
+                        <WrapperRow wrap="wrap" width="100%" gap="20px">
+                            {categories.map((categorie, index) => {
+                                const categorieClass = 'categorie_' + (index + 1);
+                                return (
+                                    <div
+                                        key={categorie._id}
+                                        className={`${styles.categorie} ${styles[categorieClass]}`}
+                                    >
+                                        <H3>{categorie.name}</H3>
+                                        <div className={styles.icon_container}>
+                                            {getCategoryIcon(categorie.name, index)}
+                                        </div>
+                                        <WrapperRow gap="8px">
+                                            {categorie.outils.slice(0, 2).map(outil => (
+                                                <div key={outil._id} className={styles.outil}>
+                                                    <span>{outil.name}</span>
+                                                </div>
+                                            ))}
+                                            {categorie.outils.length > 2 && (
+                                                <div className={styles.outil}>
+                                                    <span>+{categorie.outils.length - 2} autres</span>
+                                                </div>
+                                            )}
+                                        </WrapperRow>
+                                    </div>
+                                );
+                            })}
+                        </WrapperRow>
+                    )}
+
+                    <Button>Voir toutes les catégories</Button>
+                </Container>
+            </div>
         </main>
     );
 }

@@ -11,6 +11,7 @@ import Img from "@/components/Atoms/Img/Img";
 import P from "@/components/Atoms/Paragraph/P";
 import WrapperRow from "@/components/Atoms/Wrapper/WrapperRow";
 import {useRouter} from "next/navigation";
+import Loading from "@/components/Molecules/Loading/Loading";
 
 
 const Categories = () => {
@@ -38,10 +39,7 @@ const Categories = () => {
         return (
             <main className={styles.main}>
                 <Container flexDirection="column" alignItems="center" justifyContent="center" gap="50px" paddingTop="100px" height="100vh">
-                    <div className={styles.loading}>
-                        <div className={styles.spinner}></div>
-                        <P>Chargement des catégories...</P>
-                    </div>
+                    <Loading />
                 </Container>
             </main>
         );

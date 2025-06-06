@@ -12,7 +12,7 @@ interface ImgProps {
 const Img = (props: ImgProps) => {
   return (
     <div style={{ position: "relative", height: props.height, width: props.width }}>
-      <Image fill src={props.src} alt={props.alt || "image"} style={{ objectFit: props.objectFit }} />
+      <Image fill src={props.src} alt={props.alt ?? "image"} style={{ objectFit: props.objectFit }} />
     </div>
   );
 };
