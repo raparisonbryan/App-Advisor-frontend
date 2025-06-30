@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styles from "./Chatbot.module.scss"
 import ChatbotIcon from "@/components/Atoms/Icons/ChatbotIcon";
 import {CloseOutlined, UserOutlined} from "@ant-design/icons";
@@ -23,6 +23,20 @@ const Chatbot = () => {
         }
     ]);
     const [inputValue, setInputValue] = useState('');
+    const [isThinking, setIsThinking] = useState(false);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+    const adjustTextareaHeight = () => {
+        const textarea = textareaRef.current;
+        if (textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = `${Math.min(textarea.scrollHeight, 100)}px`;
+        }
+    };
+
+    useEffect(() => {
+        adjustTextareaHeight();
+    }, [inputValue]);
 
     const handleSendMessage = async () => {
         if (inputValue.trim()) {
@@ -35,6 +49,7 @@ const Chatbot = () => {
 
             setMessages(prev => [...prev, newMessage]);
             setInputValue('');
+            setIsThinking(true);
 
             const chatUrl = process.env.NEXT_PUBLIC_CHAT_URL;
             if (!chatUrl) {
@@ -62,6 +77,7 @@ const Chatbot = () => {
             } else {
                 throw new Error(data.error ?? "Erreur lors de la récupération de la réponse.");
             }
+            setIsThinking(false);
         }
     };
 
@@ -124,10 +140,23 @@ const Chatbot = () => {
                                 </div>
                             </div>
                         ))}
+
+                        {isThinking && (
+                            <div className={`${styles.message} ${styles.bot_message}`}>
+                                <div className={`${styles.message_content} ${styles.thinking}`}>
+                                    <div className={styles.thinking_dots}>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     <div className={styles.input_container}>
                         <textarea
+                            ref={textareaRef}
                             value={inputValue}
                             onChange={(e) => setInputValue(e.target.value)}
                             onKeyDown={handleKeyDown}
