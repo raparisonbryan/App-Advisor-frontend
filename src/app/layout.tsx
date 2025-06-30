@@ -4,6 +4,7 @@ import "@/styles/index.scss";
 import { ThemeProvider } from 'next-themes';
 import AppProvider from "@/providers/providers";
 import {ReactNode} from "react";
+import Chatbot from "@/components/Organisms/Chatbot/Chatbot";
 
 export const metadata = {
   title: "App Advisor",
@@ -24,6 +25,7 @@ const RootLayout = (props: RootLayoutProps) => {
             <AppProvider>
                 <Header />
                 {props.children}
+                <Chatbot />
             </AppProvider>
         </ThemeProvider>
       </body>
