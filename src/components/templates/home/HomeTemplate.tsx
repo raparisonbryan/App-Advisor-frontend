@@ -21,8 +21,10 @@ import Button from "@/components/Atoms/Button/Button";
 import WrapperRow from "@/components/Atoms/Wrapper/WrapperRow";
 import H3 from "@/components/Atoms/Title/H3/H3";
 import { getCategoryIcon } from "@/components/Atoms/Icons/CategoryIcons";
+import {useRouter} from "next/navigation";
 
 const HomeTemplate = () => {
+    const router = useRouter();
     const { data: avisData, isLoading: isAvisLoading } = useQuery({
         queryKey: ['avis'],
         queryFn: fetchRandomAvis,
@@ -96,14 +98,14 @@ const HomeTemplate = () => {
                                         </div>
                                         <WrapperRow gap="8px">
                                             {categorie.outils.slice(0, 2).map(outil => (
-                                                <div key={outil._id} className={styles.outil}>
+                                                <button key={outil._id} className={styles.outil} onClick={() =>  router.push(`/outil/${outil._id}`)}>
                                                     <span>{outil.name}</span>
-                                                </div>
+                                                </button>
                                             ))}
                                             {categorie.outils.length > 2 && (
-                                                <div className={styles.outil}>
+                                                <button className={styles.outil} onClick={() => router.push(`/categories`)}>
                                                     <span>+{categorie.outils.length - 2} autres</span>
-                                                </div>
+                                                </button>
                                             )}
                                         </WrapperRow>
                                     </div>

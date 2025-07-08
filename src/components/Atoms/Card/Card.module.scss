@@ -13,13 +13,10 @@
 }
 
 .login {
-    width: 400px;
+    width: 60%;
+    max-width: 600px;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
     gap: 20px;
-    padding: 20px 50px;
-    border-radius: 15px;
-    background-color: var(--card-color);
 }

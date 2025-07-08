@@ -51,7 +51,7 @@ const Categories = () => {
                 <div className={styles.header}>
                     <H1>Catégories d&apos;Outils</H1>
                     <P className={styles.subtitle}>
-                        Découvrez nos {categories.reduce((total, cat) => total + cat.outils.length, 0)} outils
+                        AppAdvisor comporte {categories.reduce((total, cat) => total + cat.outils.length, 0)} outils
                         répartis en {categories.length} catégories
                     </P>
                 </div>

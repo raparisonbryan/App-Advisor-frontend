@@ -8,7 +8,9 @@ import Navbar from '../../Molecules/Navbar/Navbar';
 const Header = () => {
     const pathname = usePathname();
     const [isScrolled, setIsScrolled] = useState(false);
-    const pagesSpecifiques = ['/inscription', '/connexion', '/outils', '/categories'];
+    const pagesAMasquer = ['/inscription', '/connexion', "/reinitialisation"];
+    const doitMasquerHeader = pagesAMasquer.includes(pathname) || pathname.startsWith('/reset/');
+    const pagesSpecifiques = ['/outils', '/categories'];
     const estSurPageSpecifique = pagesSpecifiques.includes(pathname) || pathname.startsWith('/outil/') || pathname.startsWith('/profil/');
 
     useEffect(() => {
@@ -17,18 +19,22 @@ const Header = () => {
             setIsScrolled(scrollTop > 100);
         };
 
-        if (!estSurPageSpecifique) {
+        if (!estSurPageSpecifique && !doitMasquerHeader) {
             window.addEventListener('scroll', handleScroll);
         } else {
             setIsScrolled(false);
         }
 
         return () => {
-            if (!estSurPageSpecifique) {
+            if (!estSurPageSpecifique && !doitMasquerHeader) {
                 window.removeEventListener('scroll', handleScroll);
             }
         };
-    }, [estSurPageSpecifique]); 
+    }, [estSurPageSpecifique, doitMasquerHeader]);
+
+    if (doitMasquerHeader) {
+        return null;
+    }
 
     const headerClass = estSurPageSpecifique || isScrolled ? styles.bleu : styles.transparent;
 

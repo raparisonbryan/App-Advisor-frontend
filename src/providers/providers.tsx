@@ -8,7 +8,7 @@ interface AppProvidersProps {
     children: ReactNode;
 }
 
-export default function AppProviders({ children }: AppProvidersProps) {
+export default function AppProviders({ children }: Readonly<AppProvidersProps>) {
     const [queryClient] = useState(() => new QueryClient({
         defaultOptions: {
             queries: {

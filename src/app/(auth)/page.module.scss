@@ -1,0 +1,52 @@
+@import "@/styles/index";
+
+.main {
+    height: 100vh;
+    display: flex;
+    position: relative;
+}
+
+.header {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 30px;
+    color: var(--text-color);
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--input-border);
+    color: var(--text-color);
+    background: var(--input-background);
+    border-radius: 5px;
+    margin: 5px 0;
+    font-size: 16px;
+
+    &::placeholder {
+        color: var(--text-color);
+    }
+}
+
+.link {
+    font-size: 12px;
+    color: var(--text-grey);
+    text-decoration: none;
+
+    &:hover {
+        color: var(--orange);
+    }
+}
+
+.requirement {
+    color: var(--text-grey);
+    font-size: 12px;
+}
+
+.errorMsg {
+    color: red;
+    text-align: center;
+}
