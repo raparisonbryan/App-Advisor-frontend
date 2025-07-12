@@ -26,6 +26,20 @@ $chatbotBg: linear-gradient(135deg, #0F3B4D 0%, #2F6E89 100%);
     --border-tag-color: #EBEBEB;
     --header-border: #0F3B4D;
     --scrollbar-color: #e6e9f1;
+    --admin-bg: #ffffff;
+    --admin-text: #333333;
+    --admin-border: #e0e0e0;
+    --admin-hover: #f5f5f5;
+    --admin-primary: #1890ff;
+    --admin-danger: #ff4d4f;
+    --admin-success: #52c41a;
+    --admin-warning: #faad14;
+    --admin-modal-bg: rgba(0, 0, 0, 0.5);
+    --admin-modal-content: #ffffff;
+    --admin-input-bg: #ffffff;
+    --admin-input-border: #d9d9d9;
+    --admin-button-hover: #40a9ff;
+    --admin-secondary-hover: #f0f0f0;
   }
 
 .dark {
@@ -49,4 +63,18 @@ $chatbotBg: linear-gradient(135deg, #0F3B4D 0%, #2F6E89 100%);
     --border-tag-color: rgba(255, 255, 255, 0.1);
     --header-border: rgba(255, 255, 255, 0.3);
     --scrollbar-color: rgba(255, 255, 255, 0.1);
+    --admin-bg: #1f1f1f;
+    --admin-text: #ffffff;
+    --admin-border: #434343;
+    --admin-hover: #2a2a2a;
+    --admin-primary: #177ddc;
+    --admin-danger: #a61d24;
+    --admin-success: #49aa19;
+    --admin-warning: #d89614;
+    --admin-modal-bg: rgba(0, 0, 0, 0.7);
+    --admin-modal-content: #262626;
+    --admin-input-bg: #1f1f1f;
+    --admin-input-border: #434343;
+    --admin-button-hover: #0958d9;
+    --admin-secondary-hover: #434343;
 }

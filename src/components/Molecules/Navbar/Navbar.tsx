@@ -41,7 +41,7 @@ export default function Navbar() {
             </List>
             <WrapperRow gap="20px">
                 {user ? (
-                    <Button onClick={() => router.push(`/Profil/${userId}`)}>Profil</Button>
+                    <Button onClick={() => router.push(`/profil/${userId}`)}>Profil</Button>
                 ) : (
                     <Button onClick={() => router.push("/connexion")}>Connexion</Button>
                 )}

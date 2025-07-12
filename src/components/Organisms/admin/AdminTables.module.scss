@@ -1,0 +1,130 @@
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.addBtn {
+  padding: 8px 16px;
+  font-size: 16px;
+  background: var(--admin-primary);
+  color: var(--text-color-reversed);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+  &:hover {
+    background: var(--admin-button-hover);
+  }
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 24px;
+  background: var(--card-color);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  } 
+
+  th, td {
+    border-bottom: 1px solid var(--admin-border);
+    padding: 14px 12px;
+    text-align: left;
+    color: var(--text-color);
+    background: transparent;
+  }
+  th {
+    background: var(--admin-bg);
+    font-weight: 600;
+    color: var(--title-color);
+    border-bottom: 2px solid var(--admin-border);
+  }
+  tr:last-child td {
+    border-bottom: none;
+  }
+}
+
+.editBtn, .deleteBtn, .iconBtn {
+  background: none;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+  color: var(--text-color);
+  font-size: 18px;
+  margin-right: 4px;
+  &:hover {
+    background: var(--admin-hover);
+    color: var(--admin-primary);
+  }
+}
+
+.deleteBtn {
+  color: var(--admin-danger);
+  &:hover {
+    background: var(--admin-danger);
+    color: #fff;
+  }
+}
+
+.editBtn {
+  color: var(--admin-primary);
+  &:hover {
+    background: var(--admin-primary);
+    color: #fff;
+  }
+}
+
+.error {
+  color: var(--admin-danger);
+  margin-bottom: 8px;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--admin-modal-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modalContainer {
+  background: var(--admin-modal-content);
+  padding: 32px;
+  border-radius: 12px;
+  min-width: 350px;
+  box-shadow: 0 2px 16px #0002;
+  color: var(--text-color);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modalActions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}

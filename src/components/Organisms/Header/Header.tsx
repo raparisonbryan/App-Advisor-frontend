@@ -11,7 +11,7 @@ const Header = () => {
     const pagesAMasquer = ['/inscription', '/connexion', "/reinitialisation"];
     const doitMasquerHeader = pagesAMasquer.includes(pathname) || pathname.startsWith('/reset/');
     const pagesSpecifiques = ['/outils', '/categories'];
-    const estSurPageSpecifique = pagesSpecifiques.includes(pathname) || pathname.startsWith('/outil/') || pathname.startsWith('/profil/');
+    const estSurPageSpecifique = pagesSpecifiques.includes(pathname) || pathname.startsWith('/outil/') || pathname.startsWith('/profil/') || pathname.startsWith('/admin');
 
     useEffect(() => {
         const handleScroll = () => {

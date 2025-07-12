@@ -29,3 +29,39 @@
         color: var(--orange-dark);
     }
 }
+
+.iconBtn {
+  background: none;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+  color: var(--text-color);
+  font-size: 18px;
+  margin-right: 4px;
+  &:hover {
+    background: var(--admin-hover);
+    color: var(--admin-primary);
+  }
+}
+
+.editBtn {
+  color: var(--admin-primary);
+  &:hover {
+    background: var(--admin-primary);
+    color: #fff;
+  }
+}
+
+.deleteBtn {
+  color: var(--admin-danger);
+  &:hover {
+    background: var(--admin-danger);
+    color: #fff;
+  }
+}

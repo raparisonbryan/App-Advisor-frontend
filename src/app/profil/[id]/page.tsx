@@ -54,7 +54,7 @@ const Profil = () => {
       });
 
       if (!response.ok) {
-        new Error('Une erreur est survenue lors de la mise à jour du profil');
+        console.error('Une erreur est survenue lors de la mise à jour du profil');
       }
 
       alert('profil mis à jour avec succès!');
@@ -68,6 +68,10 @@ const Profil = () => {
     await logout();
     router.push('/connexion');
   };
+
+    const handleAdmin = () => {
+        router.push('/admin');
+    };
 
   return (
     <main>
@@ -85,6 +89,9 @@ const Profil = () => {
                 </Wrapper>
                 <WrapperRow justifyContent="center" width="max-content" gap="10px">
                   <InputButton text="Valider" />
+                  {userProfil.Admin === true && (
+                      <SecondaryBtn onClick={handleAdmin}>Dashboard</SecondaryBtn>
+                  )}
                   <SecondaryBtn onClick={handleLogout}>Se déconnecter</SecondaryBtn>
                 </WrapperRow>
               </Wrapper>
