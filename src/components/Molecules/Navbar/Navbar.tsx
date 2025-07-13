@@ -1,6 +1,6 @@
 import logo from '@/assets/logo.png';
 import Link from 'next/link';
-import Button from '@/components/Atoms/Button/Button';
+import Btn from '@/components/Atoms/Button/Btn';
 import Img from '@/components/Atoms/Img/Img';
 import List from '@/components/Atoms/List/List';
 import LinkItem from '@/components/Molecules/LinkItem/LinkItem';
@@ -11,7 +11,7 @@ import styles from './Navbar.module.scss';
 import WrapperRow from '@/components/Atoms/Wrapper/WrapperRow';
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from 'next/navigation';
-import {MoonOutlined, SunOutlined} from "@ant-design/icons";
+import {MoonIcon, SunIcon} from "@radix-ui/react-icons";
 
 export default function Navbar() {
     const [mounted, setMounted] = useState(false);
@@ -41,14 +41,14 @@ export default function Navbar() {
             </List>
             <WrapperRow gap="20px">
                 {user ? (
-                    <Button onClick={() => router.push(`/profil/${userId}`)}>Profil</Button>
+                    <Btn onClick={() => router.push(`/profil/${userId}`)}>Profil</Btn>
                 ) : (
-                    <Button onClick={() => router.push("/connexion")}>Connexion</Button>
+                    <Btn onClick={() => router.push("/connexion")}>Connexion</Btn>
                 )}
                 <button className={styles.icon} onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")}>
                     {resolvedTheme === "light"
-                        ? <SunOutlined />
-                        : <MoonOutlined />
+                        ? <MoonIcon />
+                        : <SunIcon />
                     }
                 </button>
             </WrapperRow>

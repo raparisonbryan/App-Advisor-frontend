@@ -1,6 +1,7 @@
 import {ChangeEvent, useState} from "react";
-import { EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons';
 import styles from "./Input.module.scss";
+import EyeIcon from "next/dist/client/components/react-dev-overlay/ui/icons/eye-icon";
+import {EyeNoneIcon} from "@radix-ui/react-icons";
 
 interface InputPasswordProps {
     name?: string;
@@ -33,7 +34,7 @@ const InputPassword = (props: InputPasswordProps) => {
                 onClick={toggleVisibility}
                 aria-label={isVisible ? "Masquer le mot de passe" : "Afficher le mot de passe"}
             >
-                {isVisible ? <EyeInvisibleOutlined /> : <EyeTwoTone />}
+                {isVisible ? <EyeNoneIcon /> : <EyeIcon />}
             </button>
         </div>
     );

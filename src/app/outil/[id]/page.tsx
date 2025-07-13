@@ -2,7 +2,7 @@
 
 import Rating from '@/components/Molecules/Rating/Rating';
 import styles from './page.module.scss';
-import Button from '@/components/Atoms/Button/Button';
+import Btn from '@/components/Atoms/Button/Btn';
 import Img from '@/components/Atoms/Img/Img';
 import Pourcentage from '@/components/Atoms/Pourcentage/Pourcentage';
 import UserCard from '@/components/Molecules/UserCard/UserCard';
@@ -22,9 +22,9 @@ import { Avis } from '@/types/Avis';
 import {useRouter} from "next/navigation";
 import SecondaryBtn from "@/components/Atoms/Button/SecondaryBtn";
 import {createPortal} from "react-dom";
-import Modal from "@/components/Molecules/modal/Modal";
-import {Col, Row} from "antd";
+import Modal from "@/components/Molecules/Modal/Modal";
 import {useParams} from "next/navigation";
+import {Grid} from "@radix-ui/themes";
 
 const OutilDetail = () => {
   const params = useParams<{ id: string }>();
@@ -97,7 +97,7 @@ const OutilDetail = () => {
               <Elipse>{outil.description}</Elipse>
               <Link style={{textDecoration: "underline"}} href={"#description"}>Voir plus</Link>
             </div>
-            <Button onClick={openModal}>Donner un avis</Button>
+            <Btn onClick={openModal}>Donner un avis</Btn>
           </Wrapper>
           <WrapperRow width="50%" height="400px" alignItems="center" justifyContent="center">
             <OutilImg>
@@ -111,7 +111,7 @@ const OutilDetail = () => {
             <H2>Description</H2>
             <P>{outil?.description}</P>
             <WrapperRow alignItems="center" gap="10px">
-              <Button onClick={() => router.push("/Statistiques")}>Classement</Button>
+              <Btn onClick={() => router.push("/Statistiques")}>Classement</Btn>
               <SecondaryBtn onClick={openModal}>Donner un avis</SecondaryBtn>
             </WrapperRow>
           </Wrapper>
@@ -133,17 +133,16 @@ const OutilDetail = () => {
 
         <Container flexDirection="column" alignItems="center" paddingTop="100px" gap="50px">
           <H2>Avis</H2>
-          <Row gutter={[16, 16]} className={styles.avis_wrapper}>
+          <Grid columns={{ initial: "1", sm: "2", lg: "3" }} gap="4" width="100%">
             {avisAffiches.map((avis, index) => (
-                <Col key={index} span={24} sm={12} lg={8}>
-                  <UserCard
-                      avis={avis.message}
-                      nomUtilisateur={avis.user.name}
-                      note={avis.note}
-                  />
-                </Col>
+                <UserCard
+                    key={index}
+                    avis={avis.message}
+                    nomUtilisateur={avis.user.name}
+                    note={avis.note}
+                />
             ))}
-          </Row>
+          </Grid>
           {!afficherTous && avisList.length > 3 && (
               <button className={styles.button} onClick={() => setAfficherTous(true)}>Voir plus</button>
           )}

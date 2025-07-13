@@ -1,6 +1,5 @@
 "use client"
-import { Tabs } from "antd";
-import "antd/dist/reset.css";
+import {Tabs} from "@radix-ui/themes";
 import OutilsTable from "@/components/Organisms/admin/Outils";
 import AvisTable from "@/components/Organisms/admin/Avis";
 import UsersTable from "@/components/Organisms/admin/Users";
@@ -14,16 +13,35 @@ export default function AdminDashboard() {
       <main className={styles.main}>
           <Container flexDirection="column" alignItems="center" gap="50px" paddingTop="100px">
               <H1>Dashboard Admin</H1>
-              <Tabs
-                className={styles.tab}
-                defaultActiveKey="1"
-                items={[
-                  { key: "1", label: "Avis", children: <AvisTable /> },
-                  { key: "2", label: "Outils", children: <OutilsTable /> },
-                  { key: "3", label: "Utilisateurs", children: <UsersTable /> },
-                  { key: "4", label: "Catégories", children: <CategoriesTable /> },
-                ]}
-              />
+              <Tabs.Root className={styles.tab} defaultValue="avis">
+                  <Tabs.List color="orange" className={styles.list}>
+                      <Tabs.Trigger className={styles.trigger} value="avis">
+                          Avis
+                      </Tabs.Trigger>
+                      <Tabs.Trigger className={styles.trigger} value="outils">
+                          Outils
+                      </Tabs.Trigger>
+                      <Tabs.Trigger className={styles.trigger} value="utilisateurs">
+                          Utilisateurs
+                      </Tabs.Trigger>
+                      <Tabs.Trigger className={styles.trigger} value="categories">
+                          Catégories
+                      </Tabs.Trigger>
+                  </Tabs.List>
+
+                  <Tabs.Content value="avis">
+                      <AvisTable />
+                  </Tabs.Content>
+                  <Tabs.Content value="outils">
+                      <OutilsTable />
+                  </Tabs.Content>
+                  <Tabs.Content value="utilisateurs">
+                      <UsersTable />
+                  </Tabs.Content>
+                  <Tabs.Content value="categories">
+                      <CategoriesTable />
+                  </Tabs.Content>
+              </Tabs.Root>
           </Container>
       </main>
   );

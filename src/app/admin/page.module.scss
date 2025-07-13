@@ -1,7 +1,21 @@
+@import '@/styles/index.scss';
+
 .main {
   padding-bottom: 150px;
 }
 
 .tab {
   width: 100%;
+}
+
+.list {
+  margin-bottom: 40px;
+}
+
+.trigger {
+  color: var(--text-color);
+}
+
+.trigger[data-state='active'] {
+  color: $orange
 }

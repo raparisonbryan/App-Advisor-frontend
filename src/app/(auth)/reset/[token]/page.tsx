@@ -11,9 +11,9 @@ import bg from "@/assets/Hero.webp";
 import {FormEvent, useState} from "react";
 import InputPassword from "@/components/Atoms/Input/InputPassword";
 import {useParams, useRouter} from "next/navigation";
-import Button from "@/components/Atoms/Button/Button";
-import {LeftCircleOutlined} from "@ant-design/icons";
+import Btn from "@/components/Atoms/Button/Btn";
 import Link from "next/link";
+import {ArrowLeftIcon} from "@radix-ui/react-icons";
 
 const Reset = () => {
     const [password, setPassword] = useState('');
@@ -62,7 +62,7 @@ const Reset = () => {
     return (
         <main className={styles.main}>
             <Link href={'/reinitialisation'} className={styles.header}>
-                <LeftCircleOutlined />
+                <ArrowLeftIcon width="30px" height="30px" />
             </Link>
             <Wrapper alignItems="center" justifyContent="center" height="100%" width="50%">
                 <LoginCard onSubmit={isPwdReset ? handleNoSubmit : handleReset}>
@@ -70,7 +70,7 @@ const Reset = () => {
                         <>
                             <H2>Mot de passe réinitialisé !</H2>
                             <p>Vous pouvez maintenant vous connecter avec votre nouveau mot de passe.</p>
-                            <Button onClick={handleGoHome}>Accueil</Button>
+                            <Btn onClick={handleGoHome}>Accueil</Btn>
                         </>
                     ) : (
                         <>

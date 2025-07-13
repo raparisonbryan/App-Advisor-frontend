@@ -14,7 +14,7 @@ import WrapperRow from "@/components/Atoms/Wrapper/WrapperRow";
 import InputPassword from "@/components/Atoms/Input/InputPassword";
 import P from "@/components/Atoms/Paragraph/P";
 import Link from "next/link";
-import {LeftCircleOutlined} from "@ant-design/icons";
+import {ArrowLeftIcon} from "@radix-ui/react-icons";
 
 const Inscription = () => {
   const [name, setName] = useState('');
@@ -55,7 +55,7 @@ const Inscription = () => {
   return (
     <main className={styles.main}>
         <Link href={'/connexion'} className={styles.header}>
-            <LeftCircleOutlined />
+            <ArrowLeftIcon width="30px" height="30px" />
         </Link>
         <Wrapper alignItems="center" justifyContent="center" height="100%" width="50%">
             <LoginCard onSubmit={handleSignUp}>

@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styles from "./Chatbot.module.scss"
 import ChatbotIcon from "@/components/Atoms/Icons/ChatbotIcon";
-import {CloseOutlined, UserOutlined} from "@ant-design/icons";
+import {Cross1Icon, PersonIcon} from "@radix-ui/react-icons";
 
 interface Message {
     id: number;
@@ -110,7 +110,7 @@ const Chatbot = () => {
                     <div className={styles.chatbot_header}>
                         <div className={styles.chatbot_info}>
                             <div className={styles.avatar}>
-                                <UserOutlined />
+                                <PersonIcon />
                             </div>
                             <div className={styles.chatbot_details}>
                                 <p>Assistant Virtuel</p>
@@ -122,7 +122,7 @@ const Chatbot = () => {
                             onClick={() => setIsOpen(false)}
                             aria-label="Fermer le chatbot"
                         >
-                            <CloseOutlined />
+                            <Cross1Icon />
                         </button>
                     </div>
 

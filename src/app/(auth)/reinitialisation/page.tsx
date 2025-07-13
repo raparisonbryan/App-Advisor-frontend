@@ -11,9 +11,9 @@ import Img from "@/components/Atoms/Img/Img";
 import bg from "@/assets/Hero.webp";
 import {FormEvent, useState} from "react";
 import {useRouter} from "next/navigation";
-import Button from "@/components/Atoms/Button/Button";
-import {LeftCircleOutlined} from "@ant-design/icons";
+import Btn from "@/components/Atoms/Button/Btn";
 import Link from "next/link";
+import {ArrowLeftIcon} from "@radix-ui/react-icons";
 
 const Reinitialisation = () => {
     const [email, setEmail] = useState('');
@@ -60,7 +60,7 @@ const Reinitialisation = () => {
     return (
         <main className={styles.main}>
             <Link href={'/connexion'} className={styles.header}>
-                <LeftCircleOutlined />
+                <ArrowLeftIcon width="30px" height="30px" />
             </Link>
             <Wrapper alignItems="center" justifyContent="center" height="100%" width="50%">
                 <LoginCard onSubmit={isEmailSent ? handleNoSubmit : handleForgot}>
@@ -68,7 +68,7 @@ const Reinitialisation = () => {
                         <>
                             <H2>Email envoyé !</H2>
                             <p>Un email de réinitialisation a été envoyé à votre adresse email.</p>
-                            <Button onClick={handleGoHome}>Accueil</Button>
+                            <Btn onClick={handleGoHome}>Accueil</Btn>
                         </>
                     ) : (
                         <>

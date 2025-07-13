@@ -1,5 +1,5 @@
 import styles from "./SearchBar.module.scss";
-import Button from "@/components/Atoms/Button/Button";
+import Btn from "@/components/Atoms/Button/Btn";
 import InputSearch from "@/components/Atoms/Input/InputSearch";
 import {useRouter} from "next/navigation";
 
@@ -9,7 +9,7 @@ const SearchBar = () => {
     return (
         <form className={styles.form}>
           <InputSearch type="text" placeholder="Recherchez votre framework, outil, ..."/>
-            <Button onClick={() => router.push("/")}>rechercher</Button>
+            <Btn onClick={() => router.push("/")}>rechercher</Btn>
         </form>
     )
 }

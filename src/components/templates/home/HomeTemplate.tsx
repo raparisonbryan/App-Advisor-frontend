@@ -10,14 +10,14 @@ import H1 from "@/components/Atoms/Title/H1/H1";
 import H2 from "@/components/Atoms/Title/H2/H2";
 import Container from "@/components/Atoms/Container/Container";
 import Mask from "@/components/Atoms/Mask/Mask";
-import {Col, Row} from "antd";
+import { Grid } from '@radix-ui/themes';
 import { Avis } from "@/types/Avis";
 import { Categorie } from "@/types/Categorie";
 import { fetchRandomAvis } from "@/services/AvisService";
 import { fetchCategories} from "@/services/CatégorieService";
 import heroBg from "@/assets/Hero.webp";
 import Loading from "@/components/Molecules/Loading/Loading";
-import Button from "@/components/Atoms/Button/Button";
+import Btn from "@/components/Atoms/Button/Btn";
 import WrapperRow from "@/components/Atoms/Wrapper/WrapperRow";
 import H3 from "@/components/Atoms/Title/H3/H3";
 import { getCategoryIcon } from "@/components/Atoms/Icons/CategoryIcons";
@@ -60,21 +60,20 @@ const HomeTemplate = () => {
                     {isAvisLoading ? (
                         <Loading />
                     ) : (
-                        <Row gutter={[16, 16]} className={styles.avis_wrapper}>
+                        <Grid columns={{ initial: "1", sm: "2", lg: "3" }} gap="4" width="100%">
                             {avis.map(avis => (
-                                <Col key={avis._id} span={24} sm={12} lg={8}>
-                                    <OutilAvisCard
-                                        image={avis.outils.imageURL}
-                                        nom={avis.outils.name}
-                                        avis={avis.message}
-                                        note={avis.note}
-                                        starSize={20}
-                                        nomUtilisateur={avis.user.name}
-                                        outilId={avis.outils._id}
-                                    />
-                                </Col>
+                                <OutilAvisCard
+                                    key={avis._id}
+                                    image={avis.outils.imageURL}
+                                    nom={avis.outils.name}
+                                    avis={avis.message}
+                                    note={avis.note}
+                                    starSize={20}
+                                    nomUtilisateur={avis.user.name}
+                                    outilId={avis.outils._id}
+                                />
                             ))}
-                        </Row>
+                        </Grid>
                     )}
                 </Container>
 
@@ -114,7 +113,7 @@ const HomeTemplate = () => {
                         </WrapperRow>
                     )}
 
-                    <Button>Voir toutes les catégories</Button>
+                    <Btn>Voir toutes les catégories</Btn>
                 </Container>
             </div>
         </main>

@@ -15,7 +15,7 @@ import Img from "@/components/Atoms/Img/Img";
 import bg from "@/assets/Hero.webp";
 import Link from "next/link";
 import InputPassword from "@/components/Atoms/Input/InputPassword";
-import {LeftCircleOutlined} from "@ant-design/icons";
+import {ArrowLeftIcon} from "@radix-ui/react-icons";
 
 const ConnexionTemplate = () => {
     const [email, setEmail] = useState<string>('');
@@ -41,7 +41,7 @@ const ConnexionTemplate = () => {
     return (
         <main className={styles.main}>
             <Link href={'/'} className={styles.header}>
-                <LeftCircleOutlined />
+                <ArrowLeftIcon width="30px" height="30px" />
             </Link>
             <Wrapper className={styles.form_wrapper} alignItems="center" justifyContent="center" height="100%" width="50%">
                 <LoginCard onSubmit={handleLogin}>

@@ -4,14 +4,14 @@ import { Avis } from "@/types/Avis";
 import styles from "./AdminTables.module.scss";
 import Wrapper from "@/components/Atoms/Wrapper/Wrapper";
 import H2 from "@/components/Atoms/Title/H2/H2";
-import IconButton from "@/components/Atoms/Button/IconButton";
-import DeleteIcon from "@/components/Atoms/Icons/DeleteIcon";
+import { TrashIcon } from "@radix-ui/react-icons";
+import { IconButton } from "@radix-ui/themes";
+import AlertModal from "@/components/Molecules/AlertDialog/AlertModal";
 
 export default function AvisTable() {
   const [avis, setAvis] = useState<Avis[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [deleteAvisId, setDeleteAvisId] = useState<string | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
@@ -34,13 +34,12 @@ export default function AvisTable() {
     fetchAvis();
   }, []);
 
-  const handleDelete = async () => {
-    if (!deleteAvisId) return;
+  const createDeleteHandler = (avisId: string) => async () => {
     setDeleteLoading(true);
     setDeleteError(null);
     try {
       const token = Cookies.get("token");
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/avis/${deleteAvisId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/avis/${avisId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -48,10 +47,10 @@ export default function AvisTable() {
       });
       if (!response.ok) {
         const data = await response.json();
-        console.error(data.msg || "Erreur lors de la suppression de l'avis");
+        setDeleteError(data.msg || "Erreur lors de la suppression de l'avis");
+      } else {
+        fetchAvis();
       }
-      setDeleteAvisId(null);
-      fetchAvis();
     } catch (e: any) {
       setDeleteError(e.message);
     } finally {
@@ -60,51 +59,42 @@ export default function AvisTable() {
   };
 
   return (
-    <Wrapper width="100%" gap="24px">
-      <H2>Avis</H2>
-      {loading && <div>Chargement...</div>}
-      {error && <div className={styles.error}>{error}</div>}
-      {!loading && !error && (
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>Message</th>
-              <th>Outil</th>
-              <th>Utilisateur</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {avis.map((a) => (
-              <tr key={a._id}>
-                <td>{a.message}</td>
-                <td>{a.outils?.name || "-"}</td>
-                <td>{a.user?.name || a.user?.email || "-"}</td>
-                <td>
-                  <IconButton type="delete" ariaLabel="Supprimer" onClick={() => setDeleteAvisId(a._id)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </td>
+      <Wrapper width="100%" gap="24px">
+        <H2>Avis</H2>
+        {loading && <div>Chargement...</div>}
+        {error && <div className={styles.error}>{error}</div>}
+        {!loading && !error && (
+            <table className={styles.table}>
+              <thead>
+              <tr>
+                <th>Message</th>
+                <th>Outil</th>
+                <th>Utilisateur</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-      {deleteAvisId && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalContainer}>
-            <H2>Confirmer la suppression</H2>
-            <p style={{ color: "var(--text-color)" }}>Voulez-vous vraiment supprimer cet avis ? Cette action est irréversible.</p>
-            {deleteError && <div className={styles.error}>{deleteError}</div>}
-            <div className={styles.modalActions}>
-              <button onClick={() => setDeleteAvisId(null)}>Annuler</button>
-              <button onClick={handleDelete} disabled={deleteLoading} className={styles.deleteBtn}>
-                {deleteLoading ? "Suppression..." : "Supprimer"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </Wrapper>
+              </thead>
+              <tbody>
+              {avis.map((a) => (
+                  <tr key={a._id}>
+                    <td>{a.message}</td>
+                    <td>{a.outils?.name || "-"}</td>
+                    <td>{a.user?.name || a.user?.email || "-"}</td>
+                    <td>
+                      <AlertModal
+                          deleteLoading={deleteLoading}
+                          deleteError={deleteError}
+                          handleDelete={createDeleteHandler(a._id)}
+                      >
+                        <IconButton color="red" variant="soft">
+                          <TrashIcon />
+                        </IconButton>
+                      </AlertModal>
+                    </td>
+                  </tr>
+              ))}
+              </tbody>
+            </table>
+        )}
+      </Wrapper>
   );
-} 
+}

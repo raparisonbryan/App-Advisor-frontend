@@ -7,7 +7,7 @@ import InputRange from "@/components/Atoms/Input/InputRange";
 import H3 from "@/components/Atoms/Title/H3/H3";
 import InputButton from "@/components/Atoms/Input/InputButton";
 import Cookies from 'js-cookie';
-import Button from "@/components/Atoms/Button/Button";
+import Btn from "@/components/Atoms/Button/Btn";
 import {useRouter} from "next/navigation";
 
 interface ModalProps {
@@ -88,7 +88,7 @@ const Modal = ({ isOpen, onClose, outilId }: ModalProps) => {
             });
 
             if (!response.ok) {
-                throw new Error('Erreur lors de la soumission de l\'avis');
+                console.error('Erreur lors de la soumission de l\'avis');
             }
 
             console.log("Avis soumis avec succès!");
@@ -168,7 +168,7 @@ const Modal = ({ isOpen, onClose, outilId }: ModalProps) => {
                     ) : (
                         <div className={styles.login_prompt}>
                             <p className={styles.text}>Vous devez être connecté pour donner un avis</p>
-                            <Button onClick={() => router.push('/connexion')}>Se connecter</Button>
+                            <Btn onClick={() => router.push('/connexion')}>Se connecter</Btn>
                         </div>
                     )}
                 </div>

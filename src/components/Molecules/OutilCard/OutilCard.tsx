@@ -1,4 +1,4 @@
-import Button from "@/components/Atoms/Button/Button";
+import Btn from "@/components/Atoms/Button/Btn";
 import Img from "@/components/Atoms/Img/Img";
 import Elipse from "@/components/Atoms/Elipse/Elipse";
 import Card from "@/components/Atoms/Card/Card";
@@ -30,7 +30,7 @@ const OutilCard = (props: OutilCardProps) => {
                     </WrapperRow>
                     <Elipse>{description}</Elipse>
                 </Wrapper>
-                <Button onClick={onClick}>Voir plus</Button>
+                <Btn onClick={onClick}>Voir plus</Btn>
             </Wrapper>
         </Card>
     );

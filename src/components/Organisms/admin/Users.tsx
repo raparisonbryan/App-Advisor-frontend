@@ -4,9 +4,10 @@ import { User } from "@/types/User";
 import styles from "./AdminTables.module.scss";
 import H2 from "@/components/Atoms/Title/H2/H2";
 import Wrapper from "@/components/Atoms/Wrapper/Wrapper";
-import IconButton from "@/components/Atoms/Button/IconButton";
-import DeleteIcon from "@/components/Atoms/Icons/DeleteIcon";
-import EditIcon from "@/components/Atoms/Icons/EditIcon";
+import {IconButton, Badge, Flex} from "@radix-ui/themes";
+import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
+import AlertModal from "@/components/Molecules/AlertDialog/AlertModal";
+import UserModal from "@/components/Molecules/Modal/UserModal";
 
 export default function UsersTable() {
   const [users, setUsers] = useState<(User & { _id: string })[]>([]);
@@ -17,7 +18,6 @@ export default function UsersTable() {
   const [editUser, setEditUser] = useState<(User & { _id: string }) | null>(null);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [deleteUserId, setDeleteUserId] = useState<string | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
@@ -73,12 +73,13 @@ export default function UsersTable() {
       });
       if (!response.ok) {
         const data = await response.json();
-        console.error(data.msg || "Erreur lors de la modification de l'utilisateur");
+        setSubmitError(data.msg || "Erreur lors de la modification de l'utilisateur");
+      } else {
+        setShowModal(false);
+        setEditUser(null);
+        setForm({ name: "", email: "", Admin: false });
+        fetchUsers();
       }
-      setShowModal(false);
-      setEditUser(null);
-      setForm({ name: "", email: "", Admin: false });
-      fetchUsers();
     } catch (e: any) {
       setSubmitError(e.message);
     } finally {
@@ -86,22 +87,21 @@ export default function UsersTable() {
     }
   };
 
-  const handleDelete = async () => {
-    if (!deleteUserId) return;
+  const createDeleteHandler = (userId: string) => async () => {
     setDeleteLoading(true);
     setDeleteError(null);
     try {
       const token = Cookies.get("token");
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/${deleteUserId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/${userId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!response.ok) {
         const data = await response.json();
-        console.error(data.msg || "Erreur lors de la suppression de l'utilisateur");
+        setDeleteError(data.msg || "Erreur lors de la suppression de l'utilisateur");
+      } else {
+        fetchUsers();
       }
-      setDeleteUserId(null);
-      fetchUsers();
     } catch (e: any) {
       setDeleteError(e.message);
     } finally {
@@ -110,76 +110,70 @@ export default function UsersTable() {
   };
 
   return (
-    <Wrapper width="100%" gap="24px">
-      <H2>Utilisateurs</H2>
-      {loading && <div>Chargement...</div>}
-      {error && <div className={styles.error}>{error}</div>}
-      {!loading && !error && (
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>Nom</th>
-              <th>Email</th>
-              <th>Admin</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user._id}>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>{user.Admin ? "Oui" : "Non"}</td>
-                <td>
-                  <IconButton type="edit" ariaLabel="Éditer" onClick={() => openEditModal(user)}>
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton type="delete" ariaLabel="Supprimer" onClick={() => setDeleteUserId(user._id)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </td>
+      <Wrapper width="100%" gap="24px">
+        <H2>Utilisateurs ({users.length})</H2>
+        {loading && <div>Chargement...</div>}
+        {error && <div className={styles.error}>{error}</div>}
+        {!loading && !error && (
+            <table className={styles.table}>
+              <thead>
+              <tr>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Admin</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-      {showModal && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalContainer}>
-            <H2>Éditer l'utilisateur</H2>
-            <form onSubmit={handleSubmit} className={styles.form}>
-              <input name="name" placeholder="Nom" value={form.name} onChange={handleChange} required />
-              <input name="email" placeholder="Email" value={form.email} onChange={handleChange} required />
-              <label className={styles.checkboxLabel}>
-                <input type="checkbox" name="Admin" checked={!!form.Admin} onChange={handleChange} />
-                Admin
-              </label>
-              {submitError && <div className={styles.error}>{submitError}</div>}
-              <div className={styles.modalActions}>
-                <button type="button" onClick={() => { setShowModal(false); setEditUser(null); }}>Annuler</button>
-                <button type="submit" disabled={submitLoading}>
-                  {submitLoading ? "Enregistrement..." : "Enregistrer"}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-      {deleteUserId && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalContainer}>
-            <H2>Confirmer la suppression</H2>
-            <p style={{ color: "var(--text-color)" }}>Voulez-vous vraiment supprimer cet utilisateur ? Cette action est irréversible.</p>
-            {deleteError && <div className={styles.error}>{deleteError}</div>}
-            <div className={styles.modalActions}>
-              <button onClick={() => setDeleteUserId(null)}>Annuler</button>
-              <button onClick={handleDelete} disabled={deleteLoading} className={styles.deleteBtn}>
-                {deleteLoading ? "Suppression..." : "Supprimer"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </Wrapper>
+              </thead>
+              <tbody>
+              {users.map((user) => (
+                  <tr key={user._id}>
+                    <td>{user.name}</td>
+                    <td>{user.email}</td>
+                    <td>
+                      <Badge color={user.Admin ? "green" : "gray"} variant="soft">
+                        {user.Admin ? "Oui" : "Non"}
+                      </Badge>
+                    </td>
+                    <td>
+                      <Flex gap="5px">
+                        <UserModal
+                            open={showModal && editUser?._id === user._id}
+                            onOpenChange={(open) => {
+                              setShowModal(open);
+                              if (!open) {
+                                setEditUser(null);
+                                setForm({ name: "", email: "", Admin: false });
+                              }
+                            }}
+                            title="Éditer l'utilisateur"
+                            form={form}
+                            onFormChange={handleChange}
+                            onSubmit={handleSubmit}
+                            submitLoading={submitLoading}
+                            submitError={submitError}
+                        >
+                          <IconButton color="cyan" variant="soft" onClick={() => openEditModal(user)}>
+                            <Pencil1Icon />
+                          </IconButton>
+                        </UserModal>
+                        <AlertModal
+                            deleteLoading={deleteLoading}
+                            deleteError={deleteError}
+                            handleDelete={createDeleteHandler(user._id)}
+                            title="Supprimer l'utilisateur"
+                            description="Voulez-vous vraiment supprimer cet utilisateur ? Cette action est irréversible."
+                        >
+                          <IconButton color="red" variant="soft">
+                            <TrashIcon />
+                          </IconButton>
+                        </AlertModal>
+                      </Flex>
+                    </td>
+                  </tr>
+              ))}
+              </tbody>
+            </table>
+        )}
+      </Wrapper>
   );
-} 
+}

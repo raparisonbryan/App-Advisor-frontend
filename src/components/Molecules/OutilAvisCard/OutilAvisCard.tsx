@@ -1,5 +1,5 @@
 import Rating from "@/components/Molecules/Rating/Rating";
-import Button from "@/components/Atoms/Button/Button";
+import Btn from "@/components/Atoms/Button/Btn";
 import Img from "@/components/Atoms/Img/Img";
 import Elipse from "@/components/Atoms/Elipse/Elipse";
 import Card from "@/components/Atoms/Card/Card";
@@ -44,7 +44,7 @@ const OutilAvisCard = (props: OutilAvisCardProps) => {
           </WrapperRow>
           <Elipse>{avis}</Elipse>
         </Wrapper>
-        <Button onClick={() => router.push(`/outil/${outilId}`)}>Voir plus</Button>
+        <Btn onClick={() => router.push(`/outil/${outilId}`)}>Voir plus</Btn>
       </Wrapper>
     </Card>
   );
