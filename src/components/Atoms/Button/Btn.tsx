@@ -1,4 +1,3 @@
-import styles from './Button.module.scss';
 import React from "react";
 import {Button} from "@radix-ui/themes";
 
@@ -10,7 +9,7 @@ export interface ButtonProps {
 
 const Btn = (props: ButtonProps) => {
     return (
-            <Button type={props.type} className={styles.button} onClick={props.onClick}>{props.children}</Button>
+            <Button id="primary_button" type={props.type} className="button" onClick={props.onClick}>{props.children}</Button>
     )
 }
 

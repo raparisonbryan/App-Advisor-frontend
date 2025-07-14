@@ -82,3 +82,32 @@ button, input[type="submit"] {
 input {
   font-family: 'Inter', sans-serif; 
 }
+
+#primary_button.button {
+  background-color: $orange;
+  color: white;
+  border-radius: 6px;
+  padding: 10px 15px;
+  border: 1px solid $orange;
+  width: max-content;
+  min-width: 125px;
+
+  &:hover {
+    background-color: $orangeHover;
+    border: 1px solid $orangeHover;
+  }
+}
+
+#icon_btn.icon {
+  background-color: transparent;
+  color: white;
+  border: 1px solid var(--theme-border);
+  border-radius: 6px;
+  padding: 10px 10px;
+  width: max-content;
+
+  &:hover {
+    background-color: $hover;
+    color: black;
+  }
+}

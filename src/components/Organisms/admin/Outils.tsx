@@ -5,7 +5,7 @@ import Image from "next/image";
 import styles from "./AdminTables.module.scss";
 import H2 from "@/components/Atoms/Title/H2/H2";
 import Wrapper from "@/components/Atoms/Wrapper/Wrapper";
-import {IconButton, Flex} from "@radix-ui/themes";
+import {IconButton, Flex, Table} from "@radix-ui/themes";
 import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
 import AlertModal from "@/components/Molecules/AlertDialog/AlertModal";
 import EditModal from "@/components/Molecules/Modal/EditModal";
@@ -125,7 +125,7 @@ export default function OutilsTable() {
   };
 
   return (
-      <Wrapper width="100%" gap="24px">
+      <Wrapper width="100%" gap="20px">
         <div className={styles.headerRow}>
           <H2>Outils</H2>
           <EditModal
@@ -143,53 +143,57 @@ export default function OutilsTable() {
           </EditModal>
         </div>
         {loading && <div>Chargement...</div>}
-        {error && <div className={styles.error}>{error}</div>}
+        {error && <div style={{ color: "red" }}>{error}</div>}
         {!loading && !error && (
-            <table className={styles.table}>
-              <thead>
-              <tr>
-                <th>Nom</th>
-                <th>Image</th>
-                <th>Description</th>
-                <th>Actions</th>
-              </tr>
-              </thead>
-              <tbody>
-              {outils.map((outil) => (
-                  <tr key={outil._id}>
-                    <td>{outil.name}</td>
-                    <td>
-                      <Image
-                          width={60}
-                          height={40}
-                          src={outil.imageURL}
-                          alt={outil.name}
-                          style={{ objectFit: "contain", borderRadius: 6 }}
-                      />
-                    </td>
-                    <td>{outil.description}</td>
-                    <td>
-                      <Flex direction="column" gap="5px">
-                        <IconButton color="cyan" variant="soft" onClick={() => openEditModal(outil)}>
-                          <Pencil1Icon />
-                        </IconButton>
-                        <AlertModal
-                            deleteLoading={deleteLoading}
-                            deleteError={deleteError}
-                            handleDelete={createDeleteHandler(outil._id)}
-                            title="Supprimer l'outil"
-                            description="Voulez-vous vraiment supprimer cet outil ? Cette action est irréversible."
-                        >
-                          <IconButton color="red" variant="soft">
-                            <TrashIcon />
+            <Table.Root variant="surface" size="3" className={styles.table}>
+              <Table.Header>
+                <Table.Row>
+                  <Table.ColumnHeaderCell>Nom</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>Image</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>Description</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {outils.map((outil) => (
+                    <Table.Row key={outil._id} align="center">
+                      <Table.Cell style={{ width: "15%" }}>
+                        {outil.name}
+                      </Table.Cell>
+                      <Table.Cell style={{ width: "15%" }}>
+                        <Image
+                            width={60}
+                            height={40}
+                            src={outil.imageURL}
+                            alt={outil.name}
+                            style={{ objectFit: "contain", borderRadius: 6 }}
+                        />
+                      </Table.Cell >
+                      <Table.Cell style={{ width: "60%" }}>
+                        {outil.description}
+                      </Table.Cell>
+                      <Table.Cell style={{ width: "10%" }}>
+                        <Flex direction="column" gap="5px">
+                          <IconButton color="cyan" variant="soft" onClick={() => openEditModal(outil)}>
+                            <Pencil1Icon />
                           </IconButton>
-                        </AlertModal>
-                      </Flex>
-                    </td>
-                  </tr>
-              ))}
-              </tbody>
-            </table>
+                          <AlertModal
+                              deleteLoading={deleteLoading}
+                              deleteError={deleteError}
+                              handleDelete={createDeleteHandler(outil._id)}
+                              title="Supprimer l'outil"
+                              description="Voulez-vous vraiment supprimer cet outil ? Cette action est irréversible."
+                          >
+                            <IconButton color="red" variant="soft">
+                              <TrashIcon />
+                            </IconButton>
+                          </AlertModal>
+                        </Flex>
+                      </Table.Cell>
+                    </Table.Row>
+                ))}
+              </Table.Body>
+            </Table.Root>
         )}
       </Wrapper>
   );

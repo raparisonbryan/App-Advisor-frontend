@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import { User } from "@/types/User";
-import styles from "./AdminTables.module.scss";
 import H2 from "@/components/Atoms/Title/H2/H2";
 import Wrapper from "@/components/Atoms/Wrapper/Wrapper";
-import {IconButton, Badge, Flex} from "@radix-ui/themes";
+import { IconButton, Badge, Flex, Table } from "@radix-ui/themes";
 import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
 import AlertModal from "@/components/Molecules/AlertDialog/AlertModal";
 import UserModal from "@/components/Molecules/Modal/UserModal";
+import styles from "@/components/Organisms/admin/AdminTables.module.scss";
 
 export default function UsersTable() {
   const [users, setUsers] = useState<(User & { _id: string })[]>([]);
@@ -110,69 +110,69 @@ export default function UsersTable() {
   };
 
   return (
-      <Wrapper width="100%" gap="24px">
+      <Wrapper width="100%" gap="20px">
         <H2>Utilisateurs ({users.length})</H2>
         {loading && <div>Chargement...</div>}
-        {error && <div className={styles.error}>{error}</div>}
+        {error && <div style={{ color: "red" }}>{error}</div>}
         {!loading && !error && (
-            <table className={styles.table}>
-              <thead>
-              <tr>
-                <th>Nom</th>
-                <th>Email</th>
-                <th>Admin</th>
-                <th>Actions</th>
-              </tr>
-              </thead>
-              <tbody>
-              {users.map((user) => (
-                  <tr key={user._id}>
-                    <td>{user.name}</td>
-                    <td>{user.email}</td>
-                    <td>
-                      <Badge color={user.Admin ? "green" : "gray"} variant="soft">
-                        {user.Admin ? "Oui" : "Non"}
-                      </Badge>
-                    </td>
-                    <td>
-                      <Flex gap="5px">
-                        <UserModal
-                            open={showModal && editUser?._id === user._id}
-                            onOpenChange={(open) => {
-                              setShowModal(open);
-                              if (!open) {
-                                setEditUser(null);
-                                setForm({ name: "", email: "", Admin: false });
-                              }
-                            }}
-                            title="Éditer l'utilisateur"
-                            form={form}
-                            onFormChange={handleChange}
-                            onSubmit={handleSubmit}
-                            submitLoading={submitLoading}
-                            submitError={submitError}
-                        >
-                          <IconButton color="cyan" variant="soft" onClick={() => openEditModal(user)}>
-                            <Pencil1Icon />
-                          </IconButton>
-                        </UserModal>
-                        <AlertModal
-                            deleteLoading={deleteLoading}
-                            deleteError={deleteError}
-                            handleDelete={createDeleteHandler(user._id)}
-                            title="Supprimer l'utilisateur"
-                            description="Voulez-vous vraiment supprimer cet utilisateur ? Cette action est irréversible."
-                        >
-                          <IconButton color="red" variant="soft">
-                            <TrashIcon />
-                          </IconButton>
-                        </AlertModal>
-                      </Flex>
-                    </td>
-                  </tr>
-              ))}
-              </tbody>
-            </table>
+            <Table.Root variant="surface" size="3" className={styles.table}>
+              <Table.Header>
+                <Table.Row>
+                  <Table.ColumnHeaderCell>Nom</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>Admin</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {users.map((user) => (
+                    <Table.Row key={user._id} align="center">
+                      <Table.Cell>{user.name}</Table.Cell>
+                      <Table.Cell>{user.email}</Table.Cell>
+                      <Table.Cell>
+                        <Badge color={user.Admin ? "green" : "gray"} variant="soft">
+                          {user.Admin ? "Oui" : "Non"}
+                        </Badge>
+                      </Table.Cell>
+                      <Table.Cell>
+                        <Flex gap="5px">
+                          <UserModal
+                              open={showModal && editUser?._id === user._id}
+                              onOpenChange={(open) => {
+                                setShowModal(open);
+                                if (!open) {
+                                  setEditUser(null);
+                                  setForm({ name: "", email: "", Admin: false });
+                                }
+                              }}
+                              title="Éditer l'utilisateur"
+                              form={form}
+                              onFormChange={handleChange}
+                              onSubmit={handleSubmit}
+                              submitLoading={submitLoading}
+                              submitError={submitError}
+                          >
+                            <IconButton color="cyan" variant="soft" onClick={() => openEditModal(user)}>
+                              <Pencil1Icon />
+                            </IconButton>
+                          </UserModal>
+                          <AlertModal
+                              deleteLoading={deleteLoading}
+                              deleteError={deleteError}
+                              handleDelete={createDeleteHandler(user._id)}
+                              title="Supprimer l'utilisateur"
+                              description="Voulez-vous vraiment supprimer cet utilisateur ? Cette action est irréversible."
+                          >
+                            <IconButton color="red" variant="soft">
+                              <TrashIcon />
+                            </IconButton>
+                          </AlertModal>
+                        </Flex>
+                      </Table.Cell>
+                    </Table.Row>
+                ))}
+              </Table.Body>
+            </Table.Root>
         )}
       </Wrapper>
   );

@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import { Avis } from "@/types/Avis";
-import styles from "./AdminTables.module.scss";
 import Wrapper from "@/components/Atoms/Wrapper/Wrapper";
 import H2 from "@/components/Atoms/Title/H2/H2";
 import { TrashIcon } from "@radix-ui/react-icons";
-import { IconButton } from "@radix-ui/themes";
+import { IconButton, Table, Text } from "@radix-ui/themes";
 import AlertModal from "@/components/Molecules/AlertDialog/AlertModal";
+import styles from "@/components/Organisms/admin/AdminTables.module.scss";
 
 export default function AvisTable() {
   const [avis, setAvis] = useState<Avis[]>([]);
@@ -59,41 +59,47 @@ export default function AvisTable() {
   };
 
   return (
-      <Wrapper width="100%" gap="24px">
+      <Wrapper width="100%" gap="20px">
         <H2>Avis</H2>
         {loading && <div>Chargement...</div>}
-        {error && <div className={styles.error}>{error}</div>}
+        {error && <div style={{ color: "red" }}>{error}</div>}
         {!loading && !error && (
-            <table className={styles.table}>
-              <thead>
-              <tr>
-                <th>Message</th>
-                <th>Outil</th>
-                <th>Utilisateur</th>
-                <th>Actions</th>
-              </tr>
-              </thead>
-              <tbody>
-              {avis.map((a) => (
-                  <tr key={a._id}>
-                    <td>{a.message}</td>
-                    <td>{a.outils?.name || "-"}</td>
-                    <td>{a.user?.name || a.user?.email || "-"}</td>
-                    <td>
-                      <AlertModal
-                          deleteLoading={deleteLoading}
-                          deleteError={deleteError}
-                          handleDelete={createDeleteHandler(a._id)}
-                      >
-                        <IconButton color="red" variant="soft">
-                          <TrashIcon />
-                        </IconButton>
-                      </AlertModal>
-                    </td>
-                  </tr>
-              ))}
-              </tbody>
-            </table>
+            <Table.Root variant="surface" size="3" className={styles.table}>
+              <Table.Header>
+                <Table.Row>
+                  <Table.ColumnHeaderCell>Message</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>Outil</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>Utilisateur</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {avis.map((a) => (
+                    <Table.Row key={a._id} align="center">
+                      <Table.Cell style={{ width: "40%" }}>
+                        <Text>{a.message}</Text>
+                      </Table.Cell>
+                      <Table.Cell style={{ width: "15%" }}>
+                        <Text>{a.outils?.name || "-"}</Text>
+                      </Table.Cell>
+                      <Table.Cell style={{ width: "15%" }}>
+                        <Text>{a.user?.name || a.user?.email || "-"}</Text>
+                      </Table.Cell>
+                      <Table.Cell style={{ width: "10%" }}>
+                        <AlertModal
+                            deleteLoading={deleteLoading}
+                            deleteError={deleteError}
+                            handleDelete={createDeleteHandler(a._id)}
+                        >
+                          <IconButton color="red" variant="soft">
+                            <TrashIcon />
+                          </IconButton>
+                        </AlertModal>
+                      </Table.Cell>
+                    </Table.Row>
+                ))}
+              </Table.Body>
+            </Table.Root>
         )}
       </Wrapper>
   );

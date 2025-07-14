@@ -1,0 +1,37 @@
+@import '@/styles/index.scss';
+
+.main {
+  padding-bottom: 150px;
+  background: var(--background-color);
+  min-height: 100vh;
+  transition: background-color 0.3s ease;
+}
+
+.table {
+  border-radius: 15px;
+  min-width: 900px;
+}
+
+.tab {
+  width:  100%;
+}
+
+.list {
+  margin-bottom: 40px;
+}
+
+.row {
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--table-hover);
+  }
+}
+
+.trigger {
+  color: var(--text-color);
+}
+
+.trigger[data-state='active'] {
+  color: $orange
+}

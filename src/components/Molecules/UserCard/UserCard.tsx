@@ -1,4 +1,3 @@
-import styles from "./UserCard.module.scss";
 import Card from "@/components/Atoms/Card/Card";
 import Wrapper from "@/components/Atoms/Wrapper/Wrapper";
 import WrapperRow from "@/components/Atoms/Wrapper/WrapperRow";
@@ -20,7 +19,7 @@ const UserCard = ({ avis, note, nomUtilisateur }: UserCardProps) => {
           <H3>{nomUtilisateur}</H3>
           <WrapperRow alignItems="center" gap="5px">
             <StarFull />
-            <P>{note}/5</P>
+            <P>{note}/20</P>
           </WrapperRow>
         </WrapperRow>
         <P>{avis}</P>

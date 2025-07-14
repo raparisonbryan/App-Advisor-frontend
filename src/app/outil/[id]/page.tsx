@@ -27,8 +27,6 @@ import { Grid } from "@radix-ui/themes";
 
 const OutilDetail = () => {
   const params = useParams<{ id: string }>();
-  const nbAvis = 12;
-  const categorie = "Développement web";
   const [outil, setOutil] = useState<Outil>();
   const [afficherTous, setAfficherTous] = useState(false);
   const [avisList, setAvisList] = useState<Avis[]>([]);
@@ -77,11 +75,11 @@ const OutilDetail = () => {
         <Container paddingTop="100px" alignItems="center" justifyContent="space-between" height="100vh">
           <Wrapper width="40%" gap="15px">
             <div>
-              <H3 color="#DF6951">{categorie}</H3>
+              <H3 color="#DF6951">{outil.categories?.[0]?.name || "Catégorie"}</H3>
               <WrapperRow alignItems="center" gap="10px">
                 <H1>{outil.name}</H1>
-                <Rating note={4} starSize={25}/>
-                <P>({nbAvis} avis)</P>
+                <Rating note={Math.round(outil.moyenneNote || 0)} starSize={25}/>
+                <P>({outil.nombreAvis || 0} avis)</P>
               </WrapperRow>
             </div>
             <div>
@@ -120,15 +118,15 @@ const OutilDetail = () => {
           </Wrapper>
           <WrapperRow width="40%" alignItems="center" justifyContent="space-between">
             <Wrapper justifyContent="center" alignItems="center" gap="10px">
-              <Pourcentage percentage={80} colorStart="#FF4098" colorEnd="#FFB47D"/>
+              <Pourcentage percentage={Math.round((outil.moyenneDifficulte || 0) * 20)} colorStart="#FF4098" colorEnd="#FFB47D"/>
               <P>Difficulté</P>
             </Wrapper>
             <Wrapper justifyContent="center" alignItems="center" gap="10px">
-              <Pourcentage percentage={60} colorStart="#10E7FF" colorEnd="#8437FF"/>
+              <Pourcentage percentage={Math.round((outil.moyennePerformance || 0) * 20)} colorStart="#10E7FF" colorEnd="#8437FF"/>
               <P>Performance</P>
             </Wrapper>
             <Wrapper justifyContent="center" alignItems="center" gap="10px">
-              <Pourcentage percentage={40} colorStart="#D820F9" colorEnd="#7202FF"/>
+              <Pourcentage percentage={Math.round((outil.moyenneFlexibilite || 0) * 20)} colorStart="#D820F9" colorEnd="#7202FF"/>
               <P>Flexibilité</P>
             </Wrapper>
           </WrapperRow>
