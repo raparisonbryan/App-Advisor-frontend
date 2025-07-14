@@ -6,12 +6,13 @@ export interface ButtonProps {
     children?: React.ReactNode;
     onClick?: () => void;
     type?: 'button' | 'submit' | 'reset';
+    disabled?: boolean;
 }
 
-const Btn = (props: ButtonProps) => {
+const ModalBtn = (props: ButtonProps) => {
     return (
-            <Button type={props.type} className={styles.button} onClick={props.onClick}>{props.children}</Button>
+        <Button disabled={props.disabled} type={props.type} className={styles.modalBtn} onClick={props.onClick}>{props.children}</Button>
     )
 }
 
-export default Btn;
+export default ModalBtn;

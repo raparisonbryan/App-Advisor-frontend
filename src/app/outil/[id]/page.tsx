@@ -19,12 +19,11 @@ import H2 from '@/components/Atoms/Title/H2/H2';
 import { useState, useEffect } from 'react';
 import { Outil } from '@/types/Outil';
 import { Avis } from '@/types/Avis';
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 import SecondaryBtn from "@/components/Atoms/Button/SecondaryBtn";
-import {createPortal} from "react-dom";
 import Modal from "@/components/Molecules/Modal/Modal";
-import {useParams} from "next/navigation";
-import {Grid} from "@radix-ui/themes";
+import { useParams } from "next/navigation";
+import { Grid } from "@radix-ui/themes";
 
 const OutilDetail = () => {
   const params = useParams<{ id: string }>();
@@ -63,14 +62,6 @@ const OutilDetail = () => {
 
   const avisAffiches = afficherTous ? avisList : avisList.slice(0, 3);
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
   if (!outil) {
     return (
         <main className={styles.main}>
@@ -97,7 +88,13 @@ const OutilDetail = () => {
               <Elipse>{outil.description}</Elipse>
               <Link style={{textDecoration: "underline"}} href={"#description"}>Voir plus</Link>
             </div>
-            <Btn onClick={openModal}>Donner un avis</Btn>
+            <Modal
+                open={isModalOpen}
+                onOpenChange={setIsModalOpen}
+                outilId={params.id}
+            >
+              <Btn onClick={() => setIsModalOpen(true)}>Donner un avis</Btn>
+            </Modal>
           </Wrapper>
           <WrapperRow width="50%" height="400px" alignItems="center" justifyContent="center">
             <OutilImg>
@@ -111,8 +108,14 @@ const OutilDetail = () => {
             <H2>Description</H2>
             <P>{outil?.description}</P>
             <WrapperRow alignItems="center" gap="10px">
-              <Btn onClick={() => router.push("/Statistiques")}>Classement</Btn>
-              <SecondaryBtn onClick={openModal}>Donner un avis</SecondaryBtn>
+              <Btn onClick={() => router.push("/classements")}>Classement</Btn>
+              <Modal
+                  open={isModalOpen}
+                  onOpenChange={setIsModalOpen}
+                  outilId={params.id}
+              >
+                <SecondaryBtn onClick={() => setIsModalOpen(true)}>Donner un avis</SecondaryBtn>
+              </Modal>
             </WrapperRow>
           </Wrapper>
           <WrapperRow width="40%" alignItems="center" justifyContent="space-between">
@@ -144,18 +147,9 @@ const OutilDetail = () => {
             ))}
           </Grid>
           {!afficherTous && avisList.length > 3 && (
-              <button className={styles.button} onClick={() => setAfficherTous(true)}>Voir plus</button>
+              <Btn onClick={() => setAfficherTous(true)}>Voir plus</Btn>
           )}
         </Container>
-
-        {createPortal(
-            <Modal
-                isOpen={isModalOpen}
-                onClose={closeModal}
-                outilId={params.id}
-            />,
-            document.body
-        )}
       </main>
   );
 }

@@ -15,7 +15,7 @@ const InputRange = (props: InputRangeProps) => {
     <>
       <div className={styles.label_wrapper}>
         <label className={styles.label} htmlFor={id}>{label}</label>
-        <span className={styles.label}>{value}/5</span>
+        <span className={styles.label}>{value}/20</span>
       </div>
       <input
         className={styles.range}
@@ -23,8 +23,8 @@ const InputRange = (props: InputRangeProps) => {
         id={id}
         name={id}
         min="0"
-        max="5"
-        step="0.5"
+        max="20"
+        step="1"
         value={value}
         onChange={onChange}
       />

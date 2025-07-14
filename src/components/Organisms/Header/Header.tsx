@@ -10,8 +10,8 @@ const Header = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const pagesAMasquer = ['/inscription', '/connexion', "/reinitialisation"];
     const doitMasquerHeader = pagesAMasquer.includes(pathname) || pathname.startsWith('/reset/');
-    const pagesSpecifiques = ['/outils', '/categories'];
-    const estSurPageSpecifique = pagesSpecifiques.includes(pathname) || pathname.startsWith('/outil/') || pathname.startsWith('/profil/') || pathname.startsWith('/admin');
+    const pagesSpecifiques = ['/outils', '/categories', '/admin', '/classements'];
+    const estSurPageSpecifique = pagesSpecifiques.includes(pathname) || pathname.startsWith('/outil/') || pathname.startsWith('/profil/');
 
     useEffect(() => {
         const handleScroll = () => {

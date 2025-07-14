@@ -1,4 +1,5 @@
 import { Dialog, Button, Flex, TextField } from "@radix-ui/themes";
+import ModalBtn from "@/components/Atoms/Button/ModalBtn";
 
 export interface CategoryModalProps {
     children: React.ReactNode;
@@ -58,9 +59,9 @@ const CategoryModal = ({
                                 Annuler
                             </Button>
                         </Dialog.Close>
-                        <Button variant="solid" color="green" onClick={onConfirm} disabled={confirmLoading}>
+                        <ModalBtn  onClick={onConfirm} disabled={confirmLoading}>
                             {confirmLoading ? "En cours..." : confirmText}
-                        </Button>
+                        </ModalBtn>
                     </Flex>
                 </Flex>
             </Dialog.Content>

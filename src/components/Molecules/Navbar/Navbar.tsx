@@ -7,11 +7,11 @@ import LinkItem from '@/components/Molecules/LinkItem/LinkItem';
 import Container from '@/components/Atoms/Container/Container';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
-import styles from './Navbar.module.scss';
 import WrapperRow from '@/components/Atoms/Wrapper/WrapperRow';
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from 'next/navigation';
 import {MoonIcon, SunIcon} from "@radix-ui/react-icons";
+import IconBtn from "@/components/Atoms/Button/IconBtn";
 
 export default function Navbar() {
     const [mounted, setMounted] = useState(false);
@@ -34,10 +34,9 @@ export default function Navbar() {
                 <Img src={logo} height={50} width={150} objectFit="cover"/>
             </Link>
             <List>
-                <LinkItem href="/">Accueil</LinkItem>
                 <LinkItem href="/categories">Catégories</LinkItem>
                 <LinkItem href="/outils">Outils</LinkItem>
-                {/*<LinkItem href="/Statistiques">Statistiques</LinkItem>*/}
+                <LinkItem href="/classements">Classements</LinkItem>
             </List>
             <WrapperRow gap="20px">
                 {user ? (
@@ -45,12 +44,12 @@ export default function Navbar() {
                 ) : (
                     <Btn onClick={() => router.push("/connexion")}>Connexion</Btn>
                 )}
-                <button className={styles.icon} onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")}>
+                <IconBtn onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")}>
                     {resolvedTheme === "light"
                         ? <MoonIcon />
                         : <SunIcon />
                     }
-                </button>
+                </IconBtn>
             </WrapperRow>
         </Container>
     );

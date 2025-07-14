@@ -1,16 +1,15 @@
 import styles from './Button.module.scss';
 import React from "react";
-import {Button} from "@radix-ui/themes";
+import {IconButton} from "@radix-ui/themes";
 
 export interface ButtonProps {
     children?: React.ReactNode;
     onClick?: () => void;
-    type?: 'button' | 'submit' | 'reset';
 }
 
 const Btn = (props: ButtonProps) => {
     return (
-            <Button type={props.type} className={styles.button} onClick={props.onClick}>{props.children}</Button>
+        <IconButton className={styles.icon} onClick={props.onClick}>{props.children}</IconButton>
     )
 }
 

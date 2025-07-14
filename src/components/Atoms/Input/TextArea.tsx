@@ -1,5 +1,6 @@
 import styles from "./Input.module.scss";
 import { ChangeEvent } from 'react';
+import {TextArea} from "@radix-ui/themes";
 
 interface TextAreaProps {
   message: string;
@@ -7,11 +8,11 @@ interface TextAreaProps {
   onChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
-const TextArea = (props: TextAreaProps) => {
+const InputArea = (props: TextAreaProps) => {
   const { message, placeholder, onChange } = props;
 
   return (
-    <textarea
+    <TextArea
       className={styles.message}
       name={message}
       id={message}
@@ -22,4 +23,4 @@ const TextArea = (props: TextAreaProps) => {
   );
 }
 
-export default TextArea;
+export default InputArea;

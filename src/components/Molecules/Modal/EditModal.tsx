@@ -1,4 +1,5 @@
 import { Dialog, Button, Flex, TextField, TextArea } from "@radix-ui/themes";
+import ModalBtn from "@/components/Atoms/Button/ModalBtn";
 
 export interface EditModalProps {
     children: React.ReactNode;
@@ -77,9 +78,9 @@ const EditModal = ({
                                     Annuler
                                 </Button>
                             </Dialog.Close>
-                            <Button type="submit" color="green" disabled={submitLoading}>
+                            <ModalBtn type="submit" disabled={submitLoading}>
                                 {submitLoading ? (isEdit ? "Enregistrement..." : "Ajout...") : (isEdit ? "Enregistrer" : "Ajouter")}
-                            </Button>
+                            </ModalBtn>
                         </Flex>
                     </Flex>
                 </form>

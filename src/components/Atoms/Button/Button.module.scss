@@ -4,7 +4,7 @@
     background-color: $orange;
     color: white;
     border-radius: 6px;
-    padding: 10px 25px;
+    padding: 10px 15px;
     border: 1px solid $orange;
     width: max-content;
     min-width: 125px;
@@ -15,11 +15,20 @@
     }
 }
 
+.modalBtn {
+  background-color: $orange;
+  color: white;
+
+  &:hover {
+    background-color: $orangeHover;
+  }
+}
+
 .secondaryBtn {
     background-color: transparent;
     color: var(--orange);
     border-radius: 6px;
-    padding: 10px 25px;
+    padding: 10px 15px;
     border: 1px solid var(--orange);
     width: max-content;
     min-width: 125px;
@@ -30,23 +39,17 @@
     }
 }
 
-.iconBtn {
-  background: none;
-  border: none;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 0.2s;
-  color: var(--text-color);
-  font-size: 18px;
-  margin-right: 4px;
+.icon {
+  background-color: transparent;
+  color: white;
+  border: 1px solid var(--theme-border);
+  border-radius: 6px;
+  padding: 10px 10px;
+  width: max-content;
+
   &:hover {
-    background: var(--admin-hover);
-    color: var(--admin-primary);
+    background-color: $hover;
+    color: black;
   }
 }
 

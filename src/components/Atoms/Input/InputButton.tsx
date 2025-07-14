@@ -1,4 +1,5 @@
 import styles from './Input.module.scss';
+import {Button} from "@radix-ui/themes";
 
 interface InputButtonProps {
   text: string;
@@ -6,7 +7,7 @@ interface InputButtonProps {
 
 const InputButton = ({ text }: InputButtonProps) => {
   return (
-    <input type="submit" className={styles.button} value={text} />
+      <Button type="submit" className={styles.button}>{text}</Button>
   );
 }
 

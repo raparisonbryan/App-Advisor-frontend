@@ -1,5 +1,6 @@
 import styles from './Button.module.scss';
 import React from "react";
+import {Button} from "@radix-ui/themes";
 
 export interface SecondaryButtonProps {
     onClick?: () => void;
@@ -8,7 +9,7 @@ export interface SecondaryButtonProps {
 
 const SecondaryBtn = (props: SecondaryButtonProps) => {
     return (
-        <button type="button" className={styles.secondaryBtn} onClick={props.onClick}>{props.children}</button>
+        <Button type="button" className={styles.secondaryBtn} onClick={props.onClick}>{props.children}</Button>
     )
 }
 

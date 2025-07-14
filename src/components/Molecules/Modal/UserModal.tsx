@@ -1,4 +1,5 @@
 import { Dialog, Button, Flex, TextField, Switch, Text } from "@radix-ui/themes";
+import ModalBtn from "@/components/Atoms/Button/ModalBtn";
 
 export interface UserModalProps {
     children: React.ReactNode;
@@ -72,9 +73,9 @@ const UserModal = ({
                                     Annuler
                                 </Button>
                             </Dialog.Close>
-                            <Button type="submit" disabled={submitLoading}>
+                            <ModalBtn type="submit" disabled={submitLoading}>
                                 {submitLoading ? "Enregistrement..." : "Enregistrer"}
-                            </Button>
+                            </ModalBtn>
                         </Flex>
                     </Flex>
                 </form>
