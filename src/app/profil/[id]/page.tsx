@@ -11,56 +11,48 @@ import InputText from "@/components/Atoms/Input/InputText";
 import SecondaryBtn from "@/components/Atoms/Button/SecondaryBtn";
 import Cookies from "js-cookie";
 import { useAuth } from "@/context/AuthContext";
-import { User } from "@/types/User";
 import {useParams, useRouter} from "next/navigation";
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { getUserById, updateUserById } from '@/services/AuthService';
 
 const Profil = () => {
   const params = useParams<{ id: string }>();
-  const [userProfil, setUserProfil] = useState<User>({ name: '', email: '' });
   const { logout } = useAuth();
   const router = useRouter();
 
-  useEffect(() => {
-    const loadProfil = async () => {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/${params.id}`);
-        const data = await response.json();
-        setUserProfil(data);
-      } catch (erreur) {
-        console.error("Erreur lors de la récupération de l'utilisateur:", erreur);
-      }
-    };
+  const { data: userProfil, refetch } = useQuery({
+    queryKey: ['user', params.id],
+    queryFn: () => getUserById(params.id),
+    enabled: !!params.id,
+  });
 
-    loadProfil();
-  }, [params.id]);
+  const mutation = useMutation({
+    mutationFn: (user: { name: string; email: string }) => updateUserById({ id: params.id, user }),
+    onSuccess: () => {
+      alert('profil mis à jour avec succès!');
+      refetch();
+    },
+    onError: (error: any) => {
+      alert(error.message || 'Erreur lors de la mise à jour du profil');
+    },
+  });
+
+  const [form, setForm] = useState<{ name: string; email: string }>({ name: '', email: '' });
+
+  useEffect(() => {
+    if (userProfil) {
+      setForm({ name: userProfil.name || '', email: userProfil.email || '' });
+    }
+  }, [userProfil]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserProfil((prevUser) => ({
-      ...prevUser,
-      [name]: value,
-    }));
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/${params.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userProfil),
-      });
-
-      if (!response.ok) {
-        console.error('Une erreur est survenue lors de la mise à jour du profil');
-      }
-
-      alert('profil mis à jour avec succès!');
-    } catch (erreur) {
-      console.error("Erreur lors de la mise à jour de l'utilisateur:", erreur);
-    }
+    mutation.mutate(form);
   };
 
   const handleLogout = async () => {
@@ -82,14 +74,14 @@ const Profil = () => {
             <WrapperRow justifyContent="center" width="100%" gap="20px">
               <Wrapper alignItems="center" width="70%" gap="20px">
                 <Wrapper width="100%" gap="10px">
-                  <InputText type="text" name="name" value={userProfil.name} onChange={handleChange} />
+                  <InputText type="text" name="name" value={form.name} onChange={handleChange} />
                 </Wrapper>
                 <Wrapper width="100%" gap="10px">
-                  <InputText type="email" name="email" value={userProfil.email} onChange={handleChange} />
+                  <InputText type="email" name="email" value={form.email} onChange={handleChange} />
                 </Wrapper>
                 <WrapperRow justifyContent="center" width="max-content" gap="10px">
-                  <InputButton text="Valider" />
-                  {userProfil.Admin === true && (
+                  <InputButton text={mutation.isPending ? "Mise à jour..." : "Valider"} disabled={mutation.isPending} />
+                  {userProfil?.Admin === true && (
                       <SecondaryBtn onClick={handleAdmin}>Dashboard</SecondaryBtn>
                   )}
                   <SecondaryBtn onClick={handleLogout}>Se déconnecter</SecondaryBtn>

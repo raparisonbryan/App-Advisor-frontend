@@ -16,51 +16,38 @@ import P from '@/components/Atoms/Paragraph/P';
 import Elipse from '@/components/Atoms/Elipse/Elipse';
 import OutilImg from '@/components/Atoms/Img/OutilImg';
 import H2 from '@/components/Atoms/Title/H2/H2';
-import { useState, useEffect } from 'react';
-import { Outil } from '@/types/Outil';
-import { Avis } from '@/types/Avis';
+import { useState } from 'react';
 import { useRouter } from "next/navigation";
 import SecondaryBtn from "@/components/Atoms/Button/SecondaryBtn";
 import Modal from "@/components/Molecules/Modal/Modal";
 import { useParams } from "next/navigation";
 import { Grid } from "@radix-ui/themes";
+import { useQuery } from '@tanstack/react-query';
+import { getOutilById } from '@/services/OutilService';
+import { fetchAvisByOutil } from '@/services/AvisService';
 
 const OutilDetail = () => {
   const params = useParams<{ id: string }>();
-  const [outil, setOutil] = useState<Outil>();
-  const [afficherTous, setAfficherTous] = useState(false);
-  const [avisList, setAvisList] = useState<Avis[]>([]);
   const router = useRouter();
+  const [afficherTous, setAfficherTous] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    const chargerOutil = async () => {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/outils/${params.id}`);
-        const data = await response.json();
-        setOutil(data);
-      } catch (erreur) {
-        console.error("Erreur lors de la récupération de l'outil:", erreur);
-      }
-    };
+  const { data: outil, isLoading: isLoadingOutil } = useQuery({
+    queryKey: ['outil', params.id],
+    queryFn: () => getOutilById(params.id),
+    enabled: !!params.id,
+  });
 
-    const fetchAvis = async () => {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/avis/outil/${params.id}`);
-        const data = await response.json();
-        setAvisList(data.sort(() => 0.5 - Math.random()));
-      } catch (error) {
-        console.error("Erreur lors de la récupération des avis:", error);
-      }
-    };
-
-    fetchAvis();
-    chargerOutil();
-  }, [params.id]);
+  const { data: avisList = [], isLoading: isLoadingAvis } = useQuery({
+    queryKey: ['avis', params.id],
+    queryFn: () => fetchAvisByOutil(params.id),
+    enabled: !!params.id,
+    select: (data) => data.sort(() => 0.5 - Math.random()),
+  });
 
   const avisAffiches = afficherTous ? avisList : avisList.slice(0, 3);
 
-  if (!outil) {
+  if (isLoadingOutil || !outil) {
     return (
         <main className={styles.main}>
           <Container alignItems="center" justifyContent="center" height="100vh">
@@ -134,16 +121,18 @@ const OutilDetail = () => {
 
         <Container flexDirection="column" alignItems="center" paddingTop="100px" gap="50px">
           <H2>Avis</H2>
-          <Grid columns={{ initial: "1", sm: "2", lg: "3" }} gap="4" width="100%">
-            {avisAffiches.map((avis, index) => (
-                <UserCard
-                    key={index}
-                    avis={avis.message}
-                    nomUtilisateur={avis.user.name}
-                    note={avis.note}
-                />
-            ))}
-          </Grid>
+          {isLoadingAvis ? <P>Chargement des avis...</P> : (
+            <Grid columns={{ initial: "1", sm: "2", lg: "3" }} gap="4" width="100%">
+              {avisAffiches.map((avis, index) => (
+                  <UserCard
+                      key={index}
+                      avis={avis.message}
+                      nomUtilisateur={avis.user.name}
+                      note={avis.note}
+                  />
+              ))}
+            </Grid>
+          )}
           {!afficherTous && avisList.length > 3 && (
               <Btn onClick={() => setAfficherTous(true)}>Voir plus</Btn>
           )}

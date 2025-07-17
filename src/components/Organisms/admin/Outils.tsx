@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import Cookies from "js-cookie";
+import { useState } from "react";
 import { Outil } from "@/types/Outil";
 import Image from "next/image";
 import styles from "./AdminTables.module.scss";
@@ -10,37 +9,41 @@ import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
 import AlertModal from "@/components/Molecules/AlertDialog/AlertModal";
 import EditModal from "@/components/Molecules/Modal/EditModal";
 import Btn from "@/components/Atoms/Button/Btn";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getOutils, createOutil, updateOutil, deleteOutil } from '@/services/OutilService';
 
 export default function OutilsTable() {
-  const [outils, setOutils] = useState<Outil[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
+  const { data: outils = [], isLoading, error } = useQuery({
+    queryKey: ['outils'],
+    queryFn: getOutils,
+  });
+
+  const createMutation = useMutation({
+    mutationFn: createOutil,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['outils'] });
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, data }: { id: string, data: { name: string; description: string; imageURL: string } }) => updateOutil(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['outils'] });
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteOutil,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['outils'] });
+    },
+  });
+
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({ name: "", description: "", imageURL: "" });
-  const [submitLoading, setSubmitLoading] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [editOutil, setEditOutil] = useState<Outil | null>(null);
-  const [deleteLoading, setDeleteLoading] = useState(false);
-  const [deleteError, setDeleteError] = useState<string | null>(null);
-
-  const fetchOutils = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/outils`);
-      if (!response.ok) console.error("Erreur lors du chargement des outils");
-      const data = await response.json();
-      setOutils(data);
-    } catch (e: any) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchOutils();
-  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -58,70 +61,31 @@ export default function OutilsTable() {
     setShowModal(true);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitLoading(true);
     setSubmitError(null);
-    try {
-      const token = Cookies.get("token");
-      let response;
-      if (editOutil) {
-        response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/outils/${editOutil._id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(form),
-        });
-      } else {
-        response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/outils`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(form),
-        });
-      }
-      if (!response.ok) {
-        const data = await response.json();
-        setSubmitError(data.msg || "Erreur lors de l'enregistrement de l'outil");
-      } else {
-        setShowModal(false);
-        setForm({ name: "", description: "", imageURL: "" });
-        setEditOutil(null);
-        fetchOutils();
-      }
-    } catch (e: any) {
-      setSubmitError(e.message);
-    } finally {
-      setSubmitLoading(false);
+    if (editOutil) {
+      updateMutation.mutate({ id: editOutil._id, data: form }, {
+        onSuccess: () => {
+          setShowModal(false);
+          setEditOutil(null);
+          setForm({ name: "", description: "", imageURL: "" });
+        },
+        onError: (err: any) => setSubmitError(err.message),
+      });
+    } else {
+      createMutation.mutate(form, {
+        onSuccess: () => {
+          setShowModal(false);
+          setForm({ name: "", description: "", imageURL: "" });
+        },
+        onError: (err: any) => setSubmitError(err.message),
+      });
     }
   };
 
-  const createDeleteHandler = (outilId: string) => async () => {
-    setDeleteLoading(true);
-    setDeleteError(null);
-    try {
-      const token = Cookies.get("token");
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/outils/${outilId}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        const data = await response.json();
-        setDeleteError(data.msg || "Erreur lors de la suppression de l'outil");
-      } else {
-        fetchOutils();
-      }
-    } catch (e: any) {
-      setDeleteError(e.message);
-    } finally {
-      setDeleteLoading(false);
-    }
+  const createDeleteHandler = (outilId: string) => () => {
+    deleteMutation.mutate(outilId);
   };
 
   return (
@@ -135,16 +99,16 @@ export default function OutilsTable() {
               form={form}
               onFormChange={handleChange}
               onSubmit={handleSubmit}
-              submitLoading={submitLoading}
+              submitLoading={createMutation.isPending || updateMutation.isPending}
               submitError={submitError}
               isEdit={!!editOutil}
           >
             <Btn onClick={openAddModal}>+ Ajouter un outil</Btn>
           </EditModal>
         </div>
-        {loading && <div>Chargement...</div>}
-        {error && <div style={{ color: "red" }}>{error}</div>}
-        {!loading && !error && (
+        {isLoading && <div>Chargement...</div>}
+        {error && <div style={{ color: "red" }}>{(error as Error).message}</div>}
+        {!isLoading && !error && (
             <Table.Root variant="surface" size="3" className={styles.table}>
               <Table.Header>
                 <Table.Row>
@@ -178,8 +142,8 @@ export default function OutilsTable() {
                             <Pencil1Icon />
                           </IconButton>
                           <AlertModal
-                              deleteLoading={deleteLoading}
-                              deleteError={deleteError}
+                              deleteLoading={deleteMutation.isPending}
+                              deleteError={deleteMutation.error ? (deleteMutation.error as Error).message : null}
                               handleDelete={createDeleteHandler(outil._id)}
                               title="Supprimer l'outil"
                               description="Voulez-vous vraiment supprimer cet outil ? Cette action est irréversible."

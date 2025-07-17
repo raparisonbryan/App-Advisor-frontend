@@ -15,6 +15,8 @@ import InputPassword from "@/components/Atoms/Input/InputPassword";
 import P from "@/components/Atoms/Paragraph/P";
 import Link from "next/link";
 import {ArrowLeftIcon} from "@radix-ui/react-icons";
+import { useMutation } from '@tanstack/react-query';
+import { signupUser } from '@/services/AuthService';
 
 const Inscription = () => {
   const [name, setName] = useState('');
@@ -23,34 +25,22 @@ const Inscription = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const router = useRouter();
 
-  const handleSignUp = async (event: FormEvent) => {
+  const mutation = useMutation({
+    mutationFn: signupUser,
+    onSuccess: () => {
+      router.push('/connexion');
+      alert('Inscription réussie');
+    },
+    onError: (error: any) => {
+      setErrorMsg(error.message);
+    },
+  });
+
+  const handleSignUp = (event: FormEvent) => {
     event.preventDefault();
     setErrorMsg('');
-
-    try {
-        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/user/signup', {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ name, email, password }),
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json();
-            setErrorMsg(errorData.msg);
-            return;
-        }
-
-        router.push('/connexion');
-        alert('Inscription réussie');
-
-        } catch (error: any) {
-            console.error("Erreur d'inscription", error);
-            const message = error.message;
-            setErrorMsg(message);
-        }
-    };
+    mutation.mutate({ name, email, password });
+  };
 
   return (
     <main className={styles.main}>
@@ -82,7 +72,7 @@ const Inscription = () => {
                     <P className={styles.requirement}>Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial</P>
                 </Wrapper>
                 {errorMsg && <p className={styles.errorMsg}>{errorMsg}</p>}
-                <InputButton text="S'inscrire" />
+                <InputButton text={mutation.isPending ? "Inscription en cours..." : "S'inscrire"} disabled={mutation.isPending} />
             </LoginCard>
         </Wrapper>
         <Wrapper width="50%" height="100%">

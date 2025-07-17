@@ -1,69 +1,36 @@
-import { useState, useEffect } from "react";
-import Cookies from "js-cookie";
-import { Avis } from "@/types/Avis";
 import Wrapper from "@/components/Atoms/Wrapper/Wrapper";
 import H2 from "@/components/Atoms/Title/H2/H2";
 import { TrashIcon } from "@radix-ui/react-icons";
 import { IconButton, Table, Text } from "@radix-ui/themes";
 import AlertModal from "@/components/Molecules/AlertDialog/AlertModal";
 import styles from "@/components/Organisms/admin/AdminTables.module.scss";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { fetchAvis, deleteAvis } from '@/services/AvisService';
 
 export default function AvisTable() {
-  const [avis, setAvis] = useState<Avis[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [deleteLoading, setDeleteLoading] = useState(false);
-  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
+  const { data: avis = [], isLoading, error } = useQuery({
+    queryKey: ['avis'],
+    queryFn: fetchAvis,
+  });
 
-  const fetchAvis = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/avis`);
-      if (!response.ok) console.error("Erreur lors du chargement des avis");
-      const data = await response.json();
-      setAvis(data);
-    } catch (e: any) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const deleteMutation = useMutation({
+    mutationFn: deleteAvis,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['avis'] });
+    },
+  });
 
-  useEffect(() => {
-    fetchAvis();
-  }, []);
-
-  const createDeleteHandler = (avisId: string) => async () => {
-    setDeleteLoading(true);
-    setDeleteError(null);
-    try {
-      const token = Cookies.get("token");
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/avis/${avisId}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        const data = await response.json();
-        setDeleteError(data.msg || "Erreur lors de la suppression de l'avis");
-      } else {
-        fetchAvis();
-      }
-    } catch (e: any) {
-      setDeleteError(e.message);
-    } finally {
-      setDeleteLoading(false);
-    }
+  const createDeleteHandler = (avisId: string) => () => {
+    deleteMutation.mutate(avisId);
   };
 
   return (
       <Wrapper width="100%" gap="20px">
         <H2>Avis</H2>
-        {loading && <div>Chargement...</div>}
-        {error && <div style={{ color: "red" }}>{error}</div>}
-        {!loading && !error && (
+        {isLoading && <div>Chargement...</div>}
+        {error && <div style={{ color: "red" }}>{(error as Error).message}</div>}
+        {!isLoading && !error && (
             <Table.Root variant="surface" size="3" className={styles.table}>
               <Table.Header>
                 <Table.Row>
@@ -87,8 +54,8 @@ export default function AvisTable() {
                       </Table.Cell>
                       <Table.Cell style={{ width: "10%" }}>
                         <AlertModal
-                            deleteLoading={deleteLoading}
-                            deleteError={deleteError}
+                            deleteLoading={deleteMutation.isPending}
+                            deleteError={deleteMutation.error ? (deleteMutation.error as Error).message : null}
                             handleDelete={createDeleteHandler(a._id)}
                         >
                           <IconButton color="red" variant="soft">

@@ -14,6 +14,8 @@ import {useRouter} from "next/navigation";
 import Btn from "@/components/Atoms/Button/Btn";
 import Link from "next/link";
 import {ArrowLeftIcon} from "@radix-ui/react-icons";
+import { useMutation } from '@tanstack/react-query';
+import { forgotPassword } from '@/services/AuthService';
 
 const Reinitialisation = () => {
     const [email, setEmail] = useState('');
@@ -21,32 +23,20 @@ const Reinitialisation = () => {
     const [isEmailSent, setIsEmailSent] = useState(false);
     const router = useRouter();
 
-    const handleForgot = async (event: FormEvent) => {
+    const mutation = useMutation({
+        mutationFn: forgotPassword,
+        onSuccess: () => {
+            setIsEmailSent(true);
+        },
+        onError: (error: any) => {
+            setErrorMsg(error.message);
+        },
+    });
+
+    const handleForgot = (event: FormEvent) => {
         event.preventDefault();
         setErrorMsg('');
-
-        try {
-            const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/user/forgot-password', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email }),
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                setErrorMsg(errorData.msg);
-                return;
-            }
-
-            setIsEmailSent(true);
-
-        } catch (error: any) {
-            console.error("Erreur lors de l'envoi du mail", error);
-            const message = error.message;
-            setErrorMsg(message);
-        }
+        mutation.mutate(email);
     };
 
     const handleGoHome = () => {
@@ -82,7 +72,7 @@ const Reinitialisation = () => {
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
                             </WrapperRow>
-                            <InputButton text="Envoyer le mail" />
+                            <InputButton text={mutation.isPending ? "Envoi en cours..." : "Envoyer le mail"} disabled={mutation.isPending} />
                         </>
                     )}
                 </LoginCard>

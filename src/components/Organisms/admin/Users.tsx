@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import Cookies from "js-cookie";
+import { useState } from "react";
 import { User } from "@/types/User";
 import H2 from "@/components/Atoms/Title/H2/H2";
 import Wrapper from "@/components/Atoms/Wrapper/Wrapper";
@@ -8,40 +7,33 @@ import { Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
 import AlertModal from "@/components/Molecules/AlertDialog/AlertModal";
 import UserModal from "@/components/Molecules/Modal/UserModal";
 import styles from "@/components/Organisms/admin/AdminTables.module.scss";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getUsers, updateUser, deleteUser } from '@/services/AuthService';
 
 export default function UsersTable() {
-  const [users, setUsers] = useState<(User & { _id: string })[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState<{ name: string; email: string; Admin?: boolean }>({ name: "", email: "", Admin: false });
   const [editUser, setEditUser] = useState<(User & { _id: string }) | null>(null);
-  const [submitLoading, setSubmitLoading] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [deleteLoading, setDeleteLoading] = useState(false);
-  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
+  const { data: users = [], isLoading, error } = useQuery({
+    queryKey: ['users'],
+    queryFn: getUsers,
+  });
 
-  const fetchUsers = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const token = Cookies.get("token");
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!response.ok) console.error("Erreur lors du chargement des utilisateurs");
-      const data = await response.json();
-      setUsers(data);
-    } catch (e: any) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const updateMutation = useMutation({
+    mutationFn: updateUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+    },
+  });
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+  const deleteMutation = useMutation({
+    mutationFn: deleteUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+    },
+  });
 
   const openEditModal = (user: User & { _id: string }) => {
     setEditUser(user);
@@ -57,64 +49,31 @@ export default function UsersTable() {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitLoading(true);
     setSubmitError(null);
-    try {
-      const token = Cookies.get("token");
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/${editUser?._id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+    if (editUser) {
+      updateMutation.mutate({ id: editUser._id, user: form }, {
+        onSuccess: () => {
+          setShowModal(false);
+          setEditUser(null);
+          setForm({ name: "", email: "", Admin: false });
         },
-        body: JSON.stringify(form),
+        onError: (err: any) => setSubmitError(err.message),
       });
-      if (!response.ok) {
-        const data = await response.json();
-        setSubmitError(data.msg || "Erreur lors de la modification de l'utilisateur");
-      } else {
-        setShowModal(false);
-        setEditUser(null);
-        setForm({ name: "", email: "", Admin: false });
-        fetchUsers();
-      }
-    } catch (e: any) {
-      setSubmitError(e.message);
-    } finally {
-      setSubmitLoading(false);
     }
   };
 
-  const createDeleteHandler = (userId: string) => async () => {
-    setDeleteLoading(true);
-    setDeleteError(null);
-    try {
-      const token = Cookies.get("token");
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/${userId}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!response.ok) {
-        const data = await response.json();
-        setDeleteError(data.msg || "Erreur lors de la suppression de l'utilisateur");
-      } else {
-        fetchUsers();
-      }
-    } catch (e: any) {
-      setDeleteError(e.message);
-    } finally {
-      setDeleteLoading(false);
-    }
+  const createDeleteHandler = (userId: string) => () => {
+    deleteMutation.mutate(userId);
   };
 
   return (
       <Wrapper width="100%" gap="20px">
         <H2>Utilisateurs ({users.length})</H2>
-        {loading && <div>Chargement...</div>}
-        {error && <div style={{ color: "red" }}>{error}</div>}
-        {!loading && !error && (
+        {isLoading && <div>Chargement...</div>}
+        {error && <div style={{ color: "red" }}>{(error as Error).message}</div>}
+        {!isLoading && !error && (
             <Table.Root variant="surface" size="3" className={styles.table}>
               <Table.Header>
                 <Table.Row>
@@ -125,7 +84,7 @@ export default function UsersTable() {
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {users.map((user) => (
+                {users.map((user: User & { _id: string }) => (
                     <Table.Row key={user._id} align="center">
                       <Table.Cell>{user.name}</Table.Cell>
                       <Table.Cell>{user.email}</Table.Cell>
@@ -149,7 +108,7 @@ export default function UsersTable() {
                               form={form}
                               onFormChange={handleChange}
                               onSubmit={handleSubmit}
-                              submitLoading={submitLoading}
+                              submitLoading={updateMutation.isPending}
                               submitError={submitError}
                           >
                             <IconButton color="cyan" variant="soft" onClick={() => openEditModal(user)}>
@@ -157,8 +116,8 @@ export default function UsersTable() {
                             </IconButton>
                           </UserModal>
                           <AlertModal
-                              deleteLoading={deleteLoading}
-                              deleteError={deleteError}
+                              deleteLoading={deleteMutation.isPending}
+                              deleteError={deleteMutation.error ? (deleteMutation.error as Error).message : null}
                               handleDelete={createDeleteHandler(user._id)}
                               title="Supprimer l'utilisateur"
                               description="Voulez-vous vraiment supprimer cet utilisateur ? Cette action est irréversible."

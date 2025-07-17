@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from "react";
 import { Categorie } from "@/types/Categorie";
 import styles from "@/app/outils/page.module.scss";
 import Container from "@/components/Atoms/Container/Container";
@@ -12,30 +11,18 @@ import P from "@/components/Atoms/Paragraph/P";
 import WrapperRow from "@/components/Atoms/Wrapper/WrapperRow";
 import {useRouter} from "next/navigation";
 import Loading from "@/components/Molecules/Loading/Loading";
+import { useQuery } from '@tanstack/react-query';
+import { fetchCategories } from '@/services/CatégorieService';
 
 
 const Categories = () => {
-    const [categories, setCategories] = useState<Categorie[]>([]);
-    const [loading, setLoading] = useState(true);
     const router = useRouter();
+    const { data: categories = [], isLoading } = useQuery({
+        queryKey: ['categories'],
+        queryFn: fetchCategories,
+    });
 
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`);
-                const data = await response.json();
-                setCategories(data);
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchCategories();
-    }, []);
-
-    if (loading) {
+    if (isLoading) {
         return (
             <main className={styles.main}>
                 <Container flexDirection="column" alignItems="center" justifyContent="center" gap="50px" paddingTop="100px" height="100vh">
@@ -51,13 +38,13 @@ const Categories = () => {
                 <div className={styles.header}>
                     <H1>Catégories d&apos;Outils</H1>
                     <P className={styles.subtitle}>
-                        AppAdvisor comporte {categories.reduce((total, cat) => total + cat.outils.length, 0)} outils
+                        AppAdvisor comporte {categories.reduce((total: number, cat: Categorie) => total + cat.outils.length, 0)} outils
                         répartis en {categories.length} catégories
                     </P>
                 </div>
 
                 <Wrapper width="100%" gap="40px" className={styles.categories_grid}>
-                    {categories.map((categorie, index) => (
+                    {categories.map((categorie: Categorie, index: number) => (
                         <div
                             key={categorie._id}
                             className={`${styles.category_card} ${styles.fadeIn}`}
@@ -74,7 +61,7 @@ const Categories = () => {
                             </div>
 
                             <WrapperRow gap="20px" className={styles.tools_wrapper}>
-                                {categorie.outils.map((outil, toolIndex) => (
+                                {categorie.outils.map((outil: any, toolIndex: number) => (
                                     <button
                                         key={outil._id}
                                         className={`${styles.tool_card} ${styles.slideIn}`}

@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import {Tabs, Table, Text, Badge, Flex} from "@radix-ui/themes";
 import Container from "@/components/Atoms/Container/Container";
 import H1 from "@/components/Atoms/Title/H1/H1";
@@ -9,30 +8,16 @@ import { Categorie } from "@/types/Categorie";
 import Image from "next/image";
 import styles from "./page.module.scss";
 import P from "@/components/Atoms/Paragraph/P";
+import { useQuery } from '@tanstack/react-query';
 
 export default function Classements() {
-  const [categories, setCategories] = useState<Categorie[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data: categories = [], isLoading, error } = useQuery({
+    queryKey: ['categories'],
+    queryFn: fetchCategories,
+  });
 
-  useEffect(() => {
-    const getCategories = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const data = await fetchCategories();
-        setCategories(data);
-      } catch (e: any) {
-        setError(e.message || "Erreur lors du chargement des catégories");
-      } finally {
-        setLoading(false);
-      }
-    };
-    getCategories();
-  }, []);
-
-  if (loading) return <div style={{textAlign: 'center', marginTop: 50}}>Chargement...</div>;
-  if (error) return <div style={{color: 'red', textAlign: 'center', marginTop: 50}}>{error}</div>;
+  if (isLoading) return <div style={{textAlign: 'center', marginTop: 50}}>Chargement...</div>;
+  if (error) return <div style={{color: 'red', textAlign: 'center', marginTop: 50}}>{(error as Error).message}</div>;
   if (!categories.length) return <div style={{textAlign: 'center', marginTop: 50}}>Aucune catégorie trouvée.</div>;
 
   return (
@@ -41,14 +26,14 @@ export default function Classements() {
         <H1>Classement des outils par catégorie</H1>
         <Tabs.Root className={styles.tab} defaultValue={categories[0]._id}>
           <Tabs.List color="orange" className={styles.list}>
-            {categories.map((cat) => (
+            {categories.map((cat: Categorie) => (
               <Tabs.Trigger className={styles.trigger} value={cat._id} key={cat._id}>
                 {cat.name}
               </Tabs.Trigger>
             ))}
           </Tabs.List>
 
-          {categories.map((cat) => (
+          {categories.map((cat: Categorie) => (
             <Tabs.Content value={cat._id} key={cat._id}>
               <Table.Root variant="surface" size="3" className={styles.table}>
                   <Table.Header>

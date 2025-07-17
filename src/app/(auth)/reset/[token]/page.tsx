@@ -14,6 +14,8 @@ import {useParams, useRouter} from "next/navigation";
 import Btn from "@/components/Atoms/Button/Btn";
 import Link from "next/link";
 import {ArrowLeftIcon} from "@radix-ui/react-icons";
+import { useMutation } from '@tanstack/react-query';
+import { resetPassword } from '@/services/AuthService';
 
 const Reset = () => {
     const [password, setPassword] = useState('');
@@ -23,32 +25,20 @@ const Reset = () => {
     const token = params.token as string;
     const router = useRouter();
 
-    const handleReset = async (event: FormEvent) => {
+    const mutation = useMutation({
+        mutationFn: resetPassword,
+        onSuccess: () => {
+            setIsPwdReset(true);
+        },
+        onError: (error: any) => {
+            setErrorMsg(error.message);
+        },
+    });
+
+    const handleReset = (event: FormEvent) => {
         event.preventDefault();
         setErrorMsg('');
-
-        try {
-            const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/user/reset-password/' + token, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ password }),
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                setErrorMsg(errorData.msg);
-                return;
-            }
-
-            setIsPwdReset(true);
-
-        } catch (error: any) {
-            console.error("Erreur lors de l'envoi du mail", error);
-            const message = error.message;
-            setErrorMsg(message);
-        }
+        mutation.mutate({ token, password });
     };
 
     const handleGoHome = () => {
@@ -82,7 +72,7 @@ const Reset = () => {
                                     value={password} onChange={(e) => setPassword(e.target.value)}
                                 />
                             </WrapperRow>
-                            <InputButton text="Réinitialiser le mot de passe" />
+                            <InputButton text={mutation.isPending ? "Réinitialisation..." : "Réinitialiser le mot de passe"} disabled={mutation.isPending} />
                         </>
                     )}
                 </LoginCard>

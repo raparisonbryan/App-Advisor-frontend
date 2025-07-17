@@ -10,6 +10,8 @@ import Btn from "@/components/Atoms/Button/Btn";
 import { useRouter } from "next/navigation";
 import P from "@/components/Atoms/Paragraph/P";
 import ModalBtn from "@/components/Atoms/Button/ModalBtn";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createAvis } from '@/services/AvisService';
 
 interface ModalProps {
     children: React.ReactNode;
@@ -28,6 +30,15 @@ const Modal = ({ children, open, onOpenChange, outilId }: ModalProps) => {
 
     const token = Cookies.get('token');
     const router = useRouter();
+    const queryClient = useQueryClient();
+    const mutation = useMutation({
+        mutationFn: createAvis,
+        onSuccess: () => {
+            resetForm();
+            onOpenChange(false);
+            queryClient.invalidateQueries({ queryKey: ['avis', outilId] });
+        },
+    });
 
     const resetForm = () => {
         setMessage('');
@@ -56,7 +67,7 @@ const Modal = ({ children, open, onOpenChange, outilId }: ModalProps) => {
         }
     };
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setSubmitLoading(true);
 
@@ -66,36 +77,16 @@ const Modal = ({ children, open, onOpenChange, outilId }: ModalProps) => {
             return;
         }
 
-        try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/avis/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    outilId,
-                    message,
-                    difficulte: difficulty,
-                    performance,
-                    flexibilite: flexibility,
-                    note
-                })
-            });
-
-            if (!response.ok) {
-                console.error('Erreur lors de la soumission de l\'avis');
-            } else {
-                console.log("Avis soumis avec succès!");
-                resetForm();
-                onOpenChange(false);
-                window.location.reload();
-            }
-        } catch (error) {
-            console.error("Erreur lors de la soumission de l'avis:", error);
-        } finally {
-            setSubmitLoading(false);
-        }
+        mutation.mutate({
+            outilId,
+            message,
+            difficulte: difficulty,
+            performance,
+            flexibilite: flexibility,
+            note,
+        }, {
+            onSettled: () => setSubmitLoading(false),
+        });
     };
 
     return (
