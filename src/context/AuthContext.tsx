@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useContext, ReactNode } from 'react';
+import React from 'react';
 import {
     useQuery,
     useMutation,
@@ -13,6 +14,9 @@ import {
     isAuthenticated as checkAuth,
     LoginCredentials
 } from '@/services/AuthService';
+import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
+import { jwtDecode } from 'jwt-decode';
 
 interface AuthContextType {
     user: { id: string } | null;
@@ -40,6 +44,23 @@ export const useAuth = (): AuthContextType => {
 
 export function AuthProvider({ children }: AuthProviderProps) {
     const queryClient = useQueryClient();
+    const router = useRouter();
+
+    React.useEffect(() => {
+        const token = Cookies.get('token');
+        if (token) {
+            try {
+                const decoded: { exp: number } = jwtDecode(token);
+                if (!decoded.exp || Date.now() >= decoded.exp * 1000) {
+                    Cookies.remove('token');
+                    router.push('/connexion');
+                }
+            } catch {
+                Cookies.remove('token');
+                router.push('/connexion');
+            }
+        }
+    }, [router]);
 
     const {
         data: user,

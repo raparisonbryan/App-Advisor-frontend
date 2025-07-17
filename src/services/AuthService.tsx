@@ -73,8 +73,16 @@ export async function signupUser(credentials: SignupCredentials) {
 }
 
 export async function logoutUser() {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/logout`, {
+        method: 'POST',
+        credentials: 'include', 
+    });
     Cookies.remove('token');
-    return { success: true };
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.msg || 'Erreur lors de la déconnexion');
+    }
+    return await response.json();
 }
 
 export async function forgotPassword(email: string) {
@@ -108,10 +116,7 @@ export async function resetPassword({ token, password }: { token: string, passwo
 }
 
 export async function getUserById(id: string) {
-    const token = Cookies.get('token');
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/${id}`, {
-        headers: token ? { 'Authorization': `Bearer ${token}` } : undefined,
-    });
+    const response = await authFetch(`${process.env.NEXT_PUBLIC_API_URL}/user/${id}`);
     if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.msg || "Erreur lors de la récupération du profil utilisateur");
@@ -120,12 +125,10 @@ export async function getUserById(id: string) {
 }
 
 export async function updateUserById({ id, user }: { id: string, user: Partial<{ name: string; email: string; Admin?: boolean }> }) {
-    const token = Cookies.get('token');
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/${id}`, {
+    const response = await authFetch(`${process.env.NEXT_PUBLIC_API_URL}/user/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
-            ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
         },
         body: JSON.stringify(user),
     });
@@ -137,10 +140,7 @@ export async function updateUserById({ id, user }: { id: string, user: Partial<{
 }
 
 export async function getUsers() {
-    const token = Cookies.get('token');
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
-        headers: token ? { 'Authorization': `Bearer ${token}` } : undefined,
-    });
+    const response = await authFetch(`${process.env.NEXT_PUBLIC_API_URL}/user`);
     if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.msg || "Erreur lors de la récupération des utilisateurs");
@@ -149,12 +149,10 @@ export async function getUsers() {
 }
 
 export async function updateUser({ id, user }: { id: string, user: Partial<{ name: string; email: string; Admin?: boolean }> }) {
-    const token = Cookies.get('token');
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/${id}`, {
+    const response = await authFetch(`${process.env.NEXT_PUBLIC_API_URL}/user/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
-            ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
         },
         body: JSON.stringify(user),
     });
@@ -166,10 +164,8 @@ export async function updateUser({ id, user }: { id: string, user: Partial<{ nam
 }
 
 export async function deleteUser(id: string) {
-    const token = Cookies.get('token');
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/${id}`, {
+    const response = await authFetch(`${process.env.NEXT_PUBLIC_API_URL}/user/${id}`, {
         method: 'DELETE',
-        headers: token ? { 'Authorization': `Bearer ${token}` } : undefined,
     });
     if (!response.ok) {
         const errorData = await response.json();
@@ -178,7 +174,57 @@ export async function deleteUser(id: string) {
     return await response.json();
 }
 
+export async function refreshAccessToken() {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/refresh-token`, {
+        method: 'POST',
+        credentials: 'include',
+    });
+
+    if (!response.ok) {
+        throw new Error('Impossible de rafraîchir le token');
+    }
+
+    const data = await response.json();
+    if (data.token) {
+        Cookies.set('token', data.token, { expires: 7 });
+    }
+    return data;
+}
+
 export function isAuthenticated(): boolean {
     const token = Cookies.get('token');
     return !!token;
+}
+
+async function authFetch(input: RequestInfo, init?: RequestInit) {
+    let token = Cookies.get('token');
+    let headers = {
+        ...init?.headers,
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+    };
+
+    let response = await fetch(input, { ...init, headers });
+
+    if (response.status === 401) {
+        try {
+            await refreshAccessToken();
+            token = Cookies.get('token');
+            headers = {
+                ...init?.headers,
+                ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+            };
+            response = await fetch(input, { ...init, headers });
+            if (response.status === 401) {
+               console.error("Token invalide ou expiré, redirection vers la page de connexion");
+            }
+        } catch {
+            Cookies.remove('token');
+            if (typeof window !== 'undefined') {
+                window.location.href = '/connexion';
+            }
+            throw new Error('Session expirée, veuillez vous reconnecter.');
+        }
+    }
+
+    return response;
 }

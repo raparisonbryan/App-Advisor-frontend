@@ -9,7 +9,6 @@ import H2 from '@/components/Atoms/Title/H2/H2';
 import InputButton from '@/components/Atoms/Input/InputButton';
 import InputText from "@/components/Atoms/Input/InputText";
 import SecondaryBtn from "@/components/Atoms/Button/SecondaryBtn";
-import Cookies from "js-cookie";
 import { useAuth } from "@/context/AuthContext";
 import {useParams, useRouter} from "next/navigation";
 import { useQuery, useMutation } from '@tanstack/react-query';
@@ -56,9 +55,13 @@ const Profil = () => {
   };
 
   const handleLogout = async () => {
-    Cookies.remove('token');
-    await logout();
-    router.push('/connexion');
+    try {
+      await logout(); 
+    } catch (e) {
+      console.error(e);
+    } finally {
+      router.push('/connexion'); 
+    }
   };
 
     const handleAdmin = () => {

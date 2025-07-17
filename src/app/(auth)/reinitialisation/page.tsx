@@ -36,6 +36,12 @@ const Reinitialisation = () => {
     const handleForgot = (event: FormEvent) => {
         event.preventDefault();
         setErrorMsg('');
+
+        if (!email.trim()) {
+            setErrorMsg('Veuillez saisir une adresse email');
+            return;
+        }
+
         mutation.mutate(email);
     };
 
@@ -72,7 +78,10 @@ const Reinitialisation = () => {
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
                             </WrapperRow>
-                            <InputButton text={mutation.isPending ? "Envoi en cours..." : "Envoyer le mail"} disabled={mutation.isPending} />
+                            <InputButton
+                                text={mutation.isPending ? "Envoi en cours..." : "Envoyer le mail"}
+                                disabled={mutation.isPending || !email.trim()}
+                            />
                         </>
                     )}
                 </LoginCard>
