@@ -5,6 +5,7 @@ import { ThemeProvider } from 'next-themes';
 import AppProvider from "@/providers/providers";
 import {ReactNode} from "react";
 import Chatbot from "@/components/Organisms/Chatbot/Chatbot";
+import Footer from "@/components/Organisms/Footer/Footer";
 import {Theme} from "@radix-ui/themes";
 
 export const metadata = {
@@ -23,11 +24,12 @@ const RootLayout = (props: RootLayoutProps) => {
     <html lang="fr" suppressHydrationWarning={true}>
       <body>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-            <Theme>
+            <Theme hasBackground={false}>
             <AppProvider>
                 <Header />
                 {props.children}
                 <Chatbot />
+                <Footer />
             </AppProvider>
             </Theme>
         </ThemeProvider>

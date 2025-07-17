@@ -2,11 +2,9 @@
 @import "@radix-ui/themes/styles.css";
 
 html, body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    scroll-behavior: smooth;
-  }
+  margin: 0;
+  scroll-behavior: smooth;
+}
 
 * {
     box-sizing: border-box;
@@ -26,7 +24,7 @@ body {
     bottom: 0;
     background: radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
     radial-gradient(circle at 80% 20%, rgba(255, 135, 135, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 80%, rgba(120, 200, 255, 0.1) 0%, transparent 50%);
+    radial-gradient(circle at 10% 80%, rgba(120, 200, 255, 0.1) 0%, transparent 50%);
     pointer-events: none;
   }
 }
