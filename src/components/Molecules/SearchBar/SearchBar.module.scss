@@ -8,5 +8,9 @@
     backdrop-filter: blur(10px);
     padding: 20px;
     border-radius: 6px;
+
+    @media (max-width: 520px) {
+        flex-direction: column;
+    }
 }
 

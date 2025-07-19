@@ -12,9 +12,35 @@
   gap: 16px;
 }
 
+.footer_wrapper {
+  width: $padding;
+  margin: 0 auto;
+
+  @media screen and (max-width: 1024px) {
+    width: 90%;
+  }
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    gap: 50px;
+  }
+
+  @media screen and (max-width: 520px) {
+    span {
+      text-align: center;
+    }
+  }
+}
+
 .links {
   display: flex;
   gap: 40px;
+
+  @media screen and (max-width: 520px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
 }
 
 .logos {

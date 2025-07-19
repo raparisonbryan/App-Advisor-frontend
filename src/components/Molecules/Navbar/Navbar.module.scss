@@ -1,0 +1,74 @@
+.desktop_menu {
+  @media (max-width: 767px) {
+    display: none;
+  }
+}
+
+.mobile_trigger {
+  display: none;
+
+  @media (max-width: 767px) {
+    display: flex;
+  }
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--header-color);
+  z-index: 50;
+  animation: slideDown 0.3s ease-out;
+
+  &.closing {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
+.mobile_content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 1rem;
+
+  a span {
+    transition: color 0.2s;
+    color: white;
+    font-size: 2rem;
+
+    &:hover {
+      color: #666;
+    }
+  }
+}
+
+.mobile_button {
+  padding-top: 2rem;
+}
+
+// Animations
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
