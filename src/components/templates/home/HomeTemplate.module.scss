@@ -132,6 +132,7 @@
     transition: all 0.3s ease;
     position: relative;
     cursor: pointer;
+    color: var(--text-color);
 
     &:hover {
       background: rgba(255, 255, 255, 0.3);

@@ -9,14 +9,61 @@
 .table {
   border-radius: 15px;
   min-width: 900px;
+
+  @media (max-width: 768px) {
+    min-width: 800px;
+  }
 }
 
 .tab {
-  width:  100%;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+
+    // Style pour le contenu des onglets
+    :global {
+      .rt-TabsContent {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+
+        &::-webkit-scrollbar {
+          height: 8px;
+        }
+
+        &::-webkit-scrollbar-track {
+          background: var(--gray-3);
+          border-radius: 4px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background: var(--gray-6);
+          border-radius: 4px;
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+          background: var(--gray-7);
+        }
+      }
+    }
+  }
 }
 
 .list {
   margin-bottom: 40px;
+
+  @media (max-width: 768px) {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
 .row {
@@ -29,8 +76,13 @@
 
 .trigger {
   color: var(--text-color);
+
+  @media (max-width: 768px) {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
 }
 
 .trigger[data-state='active'] {
-  color: $orange
+  color: $orange;
 }

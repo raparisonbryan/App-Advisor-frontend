@@ -6,7 +6,6 @@ import SecondaryBtn from "@/components/Atoms/Button/SecondaryBtn";
 import Wrapper from "@/components/Atoms/Wrapper/Wrapper";
 import H2 from "@/components/Atoms/Title/H2/H2";
 import LoginCard from "@/components/Atoms/Card/LoginCard";
-import WrapperRow from "@/components/Atoms/Wrapper/WrapperRow";
 import { useState, FormEvent, ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import InputButton from "@/components/Atoms/Input/InputButton";
@@ -16,6 +15,7 @@ import bg from "@/assets/Hero.webp";
 import Link from "next/link";
 import InputPassword from "@/components/Atoms/Input/InputPassword";
 import {ArrowLeftIcon} from "@radix-ui/react-icons";
+import {Flex} from "@radix-ui/themes";
 
 const ConnexionTemplate = () => {
     const [email, setEmail] = useState<string>('');
@@ -43,7 +43,7 @@ const ConnexionTemplate = () => {
             <Link href={'/'} className={styles.header}>
                 <ArrowLeftIcon width="30px" height="30px" />
             </Link>
-            <Wrapper className={styles.form_wrapper} alignItems="center" justifyContent="center" height="100%" width="50%">
+            <Flex className={styles.form_wrapper} align="center" justify="center" height="100%">
                 <LoginCard onSubmit={handleLogin}>
                     <H2>Connexion</H2>
                     <InputText
@@ -60,17 +60,17 @@ const ConnexionTemplate = () => {
                         <Link className={styles.link} href={'/reinitialisation'}>Mot de passe oublié ?</Link>
                     </Wrapper>
                     {errorMsg && <p className={styles.errorMsg}>{errorMsg}</p>}
-                    <WrapperRow width="100%" gap="10px">
+                    <Flex className={styles.btn_wrapper}>
                         <InputButton text={isLoading ? "Connexion en cours..." : "Se connecter"} />
                         <SecondaryBtn onClick={() => router.push("/inscription")}>
                             Inscription
                         </SecondaryBtn>
-                    </WrapperRow>
+                    </Flex>
                 </LoginCard>
-            </Wrapper>
-            <Wrapper width="50%" height="100%">
+            </Flex>
+            <Flex className={styles.img_wrapper} height="100%">
                 <Img src={bg} height="100%" width="100%" objectFit="cover"/>
-            </Wrapper>
+            </Flex>
         </main>
 
     );

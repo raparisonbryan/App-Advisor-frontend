@@ -4,7 +4,6 @@ import styles from "./page.module.scss";
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import Container from '@/components/Atoms/Container/Container';
 import Wrapper from '@/components/Atoms/Wrapper/Wrapper';
-import WrapperRow from "@/components/Atoms/Wrapper/WrapperRow";
 import H2 from '@/components/Atoms/Title/H2/H2';
 import InputButton from '@/components/Atoms/Input/InputButton';
 import InputText from "@/components/Atoms/Input/InputText";
@@ -13,6 +12,7 @@ import { useAuth } from "@/context/AuthContext";
 import {useParams, useRouter} from "next/navigation";
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { getUserById, updateUserById } from '@/services/AuthService';
+import {Flex} from "@radix-ui/themes";
 
 const Profil = () => {
   const params = useParams<{ id: string }>();
@@ -71,26 +71,24 @@ const Profil = () => {
   return (
     <main>
       <Container justifyContent="center" alignItems="center" paddingTop="100px" height="100vh">
+        {userProfil?.Admin === true && (
+            <SecondaryBtn className={styles.admin_btn} onClick={handleAdmin}>Dashboard</SecondaryBtn>
+        )}
         <div className={styles.form_wrapper}>
           <H2>Profil</H2>
           <form className={styles.form} onSubmit={handleSubmit}>
-            <WrapperRow justifyContent="center" width="100%" gap="20px">
-              <Wrapper alignItems="center" width="70%" gap="20px">
-                <Wrapper width="100%" gap="10px">
-                  <InputText type="text" name="name" value={form.name} onChange={handleChange} />
-                </Wrapper>
-                <Wrapper width="100%" gap="10px">
-                  <InputText type="email" name="email" value={form.email} onChange={handleChange} />
-                </Wrapper>
-                <WrapperRow justifyContent="center" width="max-content" gap="10px">
-                  <InputButton text={mutation.isPending ? "Mise à jour..." : "Valider"} disabled={mutation.isPending} />
-                  {userProfil?.Admin === true && (
-                      <SecondaryBtn onClick={handleAdmin}>Dashboard</SecondaryBtn>
-                  )}
-                  <SecondaryBtn onClick={handleLogout}>Se déconnecter</SecondaryBtn>
-                </WrapperRow>
+            <Flex direction="column" gap="10px" width="100%">
+              <Wrapper width="100%" gap="10px">
+                <InputText type="text" name="name" value={form.name} onChange={handleChange} />
               </Wrapper>
-            </WrapperRow>
+              <Wrapper width="100%" gap="10px">
+                <InputText type="email" name="email" value={form.email} onChange={handleChange} />
+              </Wrapper>
+            </Flex>
+            <Flex className={styles.btn_wrapper}>
+              <InputButton text={mutation.isPending ? "Mise à jour..." : "Valider"} disabled={mutation.isPending} />
+              <SecondaryBtn onClick={handleLogout}>Se déconnecter</SecondaryBtn>
+            </Flex>
           </form>
         </div>
       </Container>
