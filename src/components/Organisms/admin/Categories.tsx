@@ -120,89 +120,91 @@ export default function CategoriesTable() {
         {isLoading && <div>Chargement...</div>}
         {error && <div style={{ color: "red" }}>{(error as Error).message}</div>}
         {!isLoading && !error && (
-            <Table.Root variant="surface" size="3" className={styles.table}>
-              <Table.Header>
-                <Table.Row>
-                  <Table.ColumnHeaderCell>Nom</Table.ColumnHeaderCell>
-                  <Table.ColumnHeaderCell>Image</Table.ColumnHeaderCell>
-                  <Table.ColumnHeaderCell>Outils</Table.ColumnHeaderCell>
-                  <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
-                {categories.map((cat: Categorie) => (
-                    <Table.Row key={cat._id} align="center">
-                      <Table.Cell>
-                        <Text weight="medium">{cat.name}</Text>
-                      </Table.Cell>
-                      <Table.Cell>
-                        <Image
-                            width={60}
-                            height={40}
-                            src={cat.imageURL}
-                            alt={cat.name}
-                            style={{ objectFit: "contain", borderRadius: "6px" }}
-                        />
-                      </Table.Cell>
-                      <Table.Cell>
-                        <Box style={{ minWidth: "200px", maxWidth: "400px" }}>
-                          <Flex direction="column" gap="2" align="start">
-                            <Flex wrap="wrap" gap="1">
-                              {cat.outils.map((outil: any) => (
-                                  <Badge className={styles.badge} key={outil._id} color="blue" variant="soft">
-                                    <AlertModal
-                                        deleteLoading={removeOutilMutation.isPending}
-                                        deleteError={removeOutilError}
-                                        handleDelete={createRemoveOutilHandler(cat._id, outil._id)}
-                                        title="Retirer l'outil"
-                                        description="Voulez-vous vraiment retirer cet outil de la catégorie ?"
-                                    >
-                                      <Text size="1">{outil.name}</Text>
-                                    </AlertModal>
-                                  </Badge>
-                              ))}
-                              {cat.outils.length === 0 && (
-                                  <Text size="1" color="gray">Aucun outil</Text>
-                              )}
+            <div className={styles.tableContainer}>
+              <Table.Root variant="surface" size="3" className={styles.table}>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.ColumnHeaderCell>Nom</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Image</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Outils</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {categories.map((cat: Categorie) => (
+                      <Table.Row key={cat._id} align="center">
+                        <Table.Cell>
+                          <Text weight="medium">{cat.name}</Text>
+                        </Table.Cell>
+                        <Table.Cell>
+                          <Image
+                              width={60}
+                              height={40}
+                              src={cat.imageURL}
+                              alt={cat.name}
+                              style={{ objectFit: "contain", borderRadius: "6px" }}
+                          />
+                        </Table.Cell>
+                        <Table.Cell>
+                          <Box style={{ minWidth: "200px", maxWidth: "400px" }}>
+                            <Flex direction="column" gap="2" align="start">
+                              <Flex wrap="wrap" gap="1">
+                                {cat.outils.map((outil: any) => (
+                                    <Badge className={styles.badge} key={outil._id} color="blue" variant="soft">
+                                      <AlertModal
+                                          deleteLoading={removeOutilMutation.isPending}
+                                          deleteError={removeOutilError}
+                                          handleDelete={createRemoveOutilHandler(cat._id, outil._id)}
+                                          title="Retirer l'outil"
+                                          description="Voulez-vous vraiment retirer cet outil de la catégorie ?"
+                                      >
+                                        <Text size="1">{outil.name}</Text>
+                                      </AlertModal>
+                                    </Badge>
+                                ))}
+                                {cat.outils.length === 0 && (
+                                    <Text size="1" color="gray">Aucun outil</Text>
+                                )}
+                              </Flex>
+                              <CategoryModal
+                                  open={addOutilModal.open && addOutilModal.catId === cat._id}
+                                  onOpenChange={(open) => setAddOutilModal({ open, catId: open ? cat._id : null })}
+                                  title="Ajouter un outil à la catégorie"
+                                  showInput={true}
+                                  inputValue={outilIdToAdd}
+                                  onInputChange={setOutilIdToAdd}
+                                  inputPlaceholder="ID de l'outil à ajouter"
+                                  onConfirm={handleAddOutil}
+                                  confirmLoading={addOutilMutation.isPending}
+                                  confirmError={addOutilError}
+                                  confirmText="Ajouter"
+                              >
+                                <Button size="1" variant="soft" color="green">
+                                  <PlusIcon width="12" height="12" />
+                                  Ajouter un outil
+                                </Button>
+                              </CategoryModal>
                             </Flex>
-                            <CategoryModal
-                                open={addOutilModal.open && addOutilModal.catId === cat._id}
-                                onOpenChange={(open) => setAddOutilModal({ open, catId: open ? cat._id : null })}
-                                title="Ajouter un outil à la catégorie"
-                                showInput={true}
-                                inputValue={outilIdToAdd}
-                                onInputChange={setOutilIdToAdd}
-                                inputPlaceholder="ID de l'outil à ajouter"
-                                onConfirm={handleAddOutil}
-                                confirmLoading={addOutilMutation.isPending}
-                                confirmError={addOutilError}
-                                confirmText="Ajouter"
-                            >
-                              <Button size="1" variant="soft" color="green">
-                                <PlusIcon width="12" height="12" />
-                                Ajouter un outil
-                              </Button>
-                            </CategoryModal>
-                          </Flex>
-                        </Box>
-                      </Table.Cell>
-                      <Table.Cell>
-                        <AlertModal
-                            deleteLoading={deleteMutation.isPending}
-                            deleteError={deleteMutation.error ? (deleteMutation.error as Error).message : null}
-                            handleDelete={createDeleteHandler(cat._id)}
-                            title="Supprimer la catégorie"
-                            description="Voulez-vous vraiment supprimer cette catégorie ? Cette action est irréversible."
-                        >
-                          <IconButton color="red" variant="soft">
-                            <TrashIcon />
-                          </IconButton>
-                        </AlertModal>
-                      </Table.Cell>
-                    </Table.Row>
-                ))}
-              </Table.Body>
-            </Table.Root>
+                          </Box>
+                        </Table.Cell>
+                        <Table.Cell>
+                          <AlertModal
+                              deleteLoading={deleteMutation.isPending}
+                              deleteError={deleteMutation.error ? (deleteMutation.error as Error).message : null}
+                              handleDelete={createDeleteHandler(cat._id)}
+                              title="Supprimer la catégorie"
+                              description="Voulez-vous vraiment supprimer cette catégorie ? Cette action est irréversible."
+                          >
+                            <IconButton color="red" variant="soft">
+                              <TrashIcon />
+                            </IconButton>
+                          </AlertModal>
+                        </Table.Cell>
+                      </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table.Root>
+            </div>
         )}
       </Wrapper>
   );

@@ -109,55 +109,57 @@ export default function OutilsTable() {
         {isLoading && <div>Chargement...</div>}
         {error && <div style={{ color: "red" }}>{(error as Error).message}</div>}
         {!isLoading && !error && (
-            <Table.Root variant="surface" size="3" className={styles.table}>
-              <Table.Header>
-                <Table.Row>
-                  <Table.ColumnHeaderCell>Nom</Table.ColumnHeaderCell>
-                  <Table.ColumnHeaderCell>Image</Table.ColumnHeaderCell>
-                  <Table.ColumnHeaderCell>Description</Table.ColumnHeaderCell>
-                  <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
-                {outils.map((outil) => (
-                    <Table.Row key={outil._id} align="center">
-                      <Table.Cell style={{ width: "15%" }}>
-                        {outil.name}
-                      </Table.Cell>
-                      <Table.Cell style={{ width: "15%" }}>
-                        <Image
-                            width={60}
-                            height={40}
-                            src={outil.imageURL}
-                            alt={outil.name}
-                            style={{ objectFit: "contain", borderRadius: 6 }}
-                        />
-                      </Table.Cell >
-                      <Table.Cell style={{ width: "60%" }}>
-                        {outil.description}
-                      </Table.Cell>
-                      <Table.Cell style={{ width: "10%" }}>
-                        <Flex direction="column" gap="5px">
-                          <IconButton color="cyan" variant="soft" onClick={() => openEditModal(outil)}>
-                            <Pencil1Icon />
-                          </IconButton>
-                          <AlertModal
-                              deleteLoading={deleteMutation.isPending}
-                              deleteError={deleteMutation.error ? (deleteMutation.error as Error).message : null}
-                              handleDelete={createDeleteHandler(outil._id)}
-                              title="Supprimer l'outil"
-                              description="Voulez-vous vraiment supprimer cet outil ? Cette action est irréversible."
-                          >
-                            <IconButton color="red" variant="soft">
-                              <TrashIcon />
+            <div className={styles.tableContainer}>
+              <Table.Root variant="surface" size="3" className={styles.table}>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.ColumnHeaderCell>Nom</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Image</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Description</Table.ColumnHeaderCell>
+                    <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {outils.map((outil) => (
+                      <Table.Row key={outil._id} align="center">
+                        <Table.Cell style={{ width: "15%" }}>
+                          {outil.name}
+                        </Table.Cell>
+                        <Table.Cell style={{ width: "15%" }}>
+                          <Image
+                              width={60}
+                              height={40}
+                              src={outil.imageURL}
+                              alt={outil.name}
+                              style={{ objectFit: "contain", borderRadius: 6 }}
+                          />
+                        </Table.Cell >
+                        <Table.Cell style={{ width: "60%" }}>
+                          {outil.description}
+                        </Table.Cell>
+                        <Table.Cell style={{ width: "10%" }}>
+                          <Flex direction="column" gap="5px">
+                            <IconButton color="cyan" variant="soft" onClick={() => openEditModal(outil)}>
+                              <Pencil1Icon />
                             </IconButton>
-                          </AlertModal>
-                        </Flex>
-                      </Table.Cell>
-                    </Table.Row>
-                ))}
-              </Table.Body>
-            </Table.Root>
+                            <AlertModal
+                                deleteLoading={deleteMutation.isPending}
+                                deleteError={deleteMutation.error ? (deleteMutation.error as Error).message : null}
+                                handleDelete={createDeleteHandler(outil._id)}
+                                title="Supprimer l'outil"
+                                description="Voulez-vous vraiment supprimer cet outil ? Cette action est irréversible."
+                            >
+                              <IconButton color="red" variant="soft">
+                                <TrashIcon />
+                              </IconButton>
+                            </AlertModal>
+                          </Flex>
+                        </Table.Cell>
+                      </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table.Root>
+            </div>
         )}
       </Wrapper>
   );

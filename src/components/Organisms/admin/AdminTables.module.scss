@@ -2,14 +2,45 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  position: sticky;
+  left: 0;
+  z-index: 10;
 }
 
 .table {
   border-radius: 15px;
   min-width: 900px;
+
+  @media (max-width: 768px) {
+    min-width: 800px;
+  }
 }
 
 .badge {
   cursor: pointer;
+}
+
+.tableContainer {
+  @media (max-width: 768px) {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: var(--gray-3);
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--gray-6);
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: var(--gray-7);
+    }
+  }
 }
