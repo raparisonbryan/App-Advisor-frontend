@@ -63,7 +63,7 @@ const Modal = ({ children, open, onOpenChange, outilId }: ModalProps) => {
                 setNote(newValue);
                 break;
             default:
-                console.log(`Invalid Slider Name: ${name}`);
+                console.error(`Invalid Slider Name: ${name}`);
         }
     };
 
