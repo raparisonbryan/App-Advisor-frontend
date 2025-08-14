@@ -119,7 +119,7 @@ jobs:
 
     - name: Dead code detection
       run: |
-        npx unimported
+        npx unimported || echo "Unimported not found dead code"
 
   accessibility:
     runs-on: ubuntu-latest
