@@ -25,6 +25,7 @@
     "react-dom": "^18"
   },
   "devDependencies": {
+    "@size-limit/preset-big-lib": "^11.2.0",
     "@types/js-cookie": "^3.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.10.0",
@@ -36,6 +37,7 @@
     "eslint-config-next": "^15.2.4",
     "prettier": "^3.6.2",
     "sass": "^1.89.2",
+    "size-limit": "^11.2.0",
     "typescript": "^5.7.2"
   }
 }
