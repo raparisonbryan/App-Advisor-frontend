@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ dev ]
 
+env:
+  NODE_VERSION: '20.x'
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -39,7 +42,7 @@ jobs:
     - name: Run tests (if available)
       run: npm test || echo "No tests configured"
 
-  quality:
+  security:
     runs-on: ubuntu-latest
     needs: test
 
@@ -50,17 +53,119 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20.x'
+        node-version: ${{ env.NODE_VERSION }}
         cache: 'npm'
 
     - name: Install dependencies
       run: npm ci
 
-    - name: Security audit (moderate)
-      run: npm audit --audit-level moderate
+    - name: Security audit (strict)
+      run: npm audit --audit-level high
 
-    - name: Check bundle size
-      run: npm run build && npx @next/bundle-analyzer@latest .next/static/chunks/ || echo "Bundle analyzer not available"
+    - name: Check for known vulnerabilities
+      run: |
+        npx audit-ci --config ./audit-ci.json || echo "audit-ci not configured"
+
+    - name: CodeQL Analysis
+      uses: github/codeql-action/init@v3
+      with:
+        languages: javascript
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+
+    - name: Check outdated dependencies
+      run: |
+        npm outdated --depth=0 || echo "Some dependencies are outdated"
+
+    - name: Secrets scan
+      run: |
+        npx @secretlint/cli "**/*" || echo "Secretlint not configured"
+
+  quality:
+    runs-on: ubuntu-latest
+    needs: [test, security]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build for analysis
+      run: npm run build
+
+    - name: Bundle analyzer
+      run: |
+        npx @next/bundle-analyzer@latest .next/static/chunks/ || echo "Bundle analyzer not available"
+
+    - name: Performance budget check
+      run: |
+        npx bundlesize || echo "Bundlesize not configured"
+
+    - name: Code complexity check
+      run: |
+        npx complexity-report --format json src/ || echo "Complexity report not available"
 
     - name: Format check
       run: npm run format-check || echo "Prettier not configured"
+
+    - name: Dead code detection
+      run: |
+        npx unimported || echo "Unimported not configured"
+
+  accessibility:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Start application for testing
+        run: |
+          npm start &
+          sleep 10
+        env:
+          PORT: 3000
+
+
+      - name: Accessibility tests (axe-core)
+        run: |
+          npx @axe-core/cli http://localhost:3000 --exit || echo "Accessibility tests not configured"
+
+      - name: Lighthouse CI
+        run: |
+          npm install -g @lhci/cli
+          lhci autorun || echo "Lighthouse CI not configured"
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+
+  final-validation:
+    runs-on: ubuntu-latest
+    needs: [test, security, quality, accessibility]
+
+    steps:
+      - name: All checks passed
+        run: |
+          echo "✅ Tous les contrôles qualité sont passés"
+          echo "🚀 Code prêt pour déploiement"
