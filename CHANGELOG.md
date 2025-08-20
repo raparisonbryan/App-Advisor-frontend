@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/raparisonbryan/App-Advisor-frontend/compare/v1.1.0...v1.1.1) (2025-08-20)
+
+
+### Bug Fixes
+
+* remove npm plugin from semantic-release configuration ([ceea71d](https://github.com/raparisonbryan/App-Advisor-frontend/commit/ceea71d4b5b10f548e4405023501ceab3769159c))
+
 # [1.1.0](https://github.com/raparisonbryan/App-Advisor-frontend/compare/v1.0.1...v1.1.0) (2025-08-20)
 
 
