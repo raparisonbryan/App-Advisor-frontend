@@ -67,7 +67,11 @@ export default function Navbar() {
                         ) : (
                             <Btn onClick={() => router.push("/connexion")}>Connexion</Btn>
                         )}
-                        <IconBtn onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")}>
+                        <IconBtn 
+                            onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")}
+                            ariaLabel="Basculer entre le thème clair et sombre"
+                            title="Changer le thème"
+                        >
                             {resolvedTheme === "light" ? <MoonIcon /> : <SunIcon />}
                         </IconBtn>
                     </WrapperRow>
@@ -75,10 +79,18 @@ export default function Navbar() {
 
                 <div className={styles.mobile_trigger}>
                     <WrapperRow gap="10px">
-                        <IconBtn onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")}>
+                        <IconBtn 
+                            onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")}
+                            ariaLabel="Basculer entre le thème clair et sombre"
+                            title="Changer le thème"
+                        >
                             {resolvedTheme === "light" ? <MoonIcon /> : <SunIcon />}
                         </IconBtn>
-                        <IconBtn onClick={toggleMenu}>
+                        <IconBtn 
+                            onClick={toggleMenu}
+                            ariaLabel={isMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+                            title={isMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+                        >
                             {isMenuOpen ? <Cross1Icon /> : <HamburgerMenuIcon />}
                         </IconBtn>
                     </WrapperRow>
@@ -91,7 +103,11 @@ export default function Navbar() {
                         <Link href="/" onClick={closeMenu}>
                             <Img src={logo} height={50} width={150} objectFit="cover"/>
                         </Link>
-                        <IconBtn onClick={closeMenu}>
+                        <IconBtn 
+                            onClick={closeMenu}
+                            ariaLabel="Fermer le menu"
+                            title="Fermer le menu"
+                        >
                             <Cross1Icon />
                         </IconBtn>
                     </Container>

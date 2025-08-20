@@ -28,7 +28,7 @@ const RootLayout = (props: RootLayoutProps) => {
             <AppProvider>
                 <Header />
                 {props.children}
-                <Chatbot />
+                {/* <Chatbot /> */}
                 <Footer />
             </AppProvider>
             </Theme>
