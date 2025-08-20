@@ -1,3 +1,11 @@
+## [1.0.1](https://github.com/raparisonbryan/App-Advisor-frontend/compare/v1.0.0...v1.0.1) (2025-08-20)
+
+
+### Bug Fixes
+
+* **ci:** remove NPM_TOKEN dependency for private app ([34ee7b4](https://github.com/raparisonbryan/App-Advisor-frontend/commit/34ee7b4be361f4ffa20505d83dff3ccba9df7b8b))
+* **dependabot:** redirect updates to dev branch for security ([1ec5757](https://github.com/raparisonbryan/App-Advisor-frontend/commit/1ec57574f3f44a8e9098d3e4c578fcfae50975c7))
+
 # 1.0.0 (2025-08-20)
 
 
