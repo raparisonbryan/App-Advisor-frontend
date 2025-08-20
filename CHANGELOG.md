@@ -1,3 +1,11 @@
+# [1.1.0](https://github.com/raparisonbryan/App-Advisor-frontend/compare/v1.0.1...v1.1.0) (2025-08-20)
+
+
+### Features
+
+* improve accessibility and clean up layout ([6bd3037](https://github.com/raparisonbryan/App-Advisor-frontend/commit/6bd303756ac6f5af67b934a173ea69394fa87299))
+* optimize dependabot configuration to reduce spam ([57e6b94](https://github.com/raparisonbryan/App-Advisor-frontend/commit/57e6b944313dfa45df9e4ce57289d1e7d684f579))
+
 ## [1.0.1](https://github.com/raparisonbryan/App-Advisor-frontend/compare/v1.0.0...v1.0.1) (2025-08-20)
 
 
