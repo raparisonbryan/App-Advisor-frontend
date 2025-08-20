@@ -4,7 +4,6 @@ import "@/styles/index.scss";
 import { ThemeProvider } from 'next-themes';
 import AppProvider from "@/providers/providers";
 import {ReactNode} from "react";
-import Chatbot from "@/components/Organisms/Chatbot/Chatbot";
 import Footer from "@/components/Organisms/Footer/Footer";
 import {Theme} from "@radix-ui/themes";
 
