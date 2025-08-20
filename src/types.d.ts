@@ -1,0 +1,56 @@
+declare module '*.module.scss' {
+  const classes: { [key: string]: string };
+  export default classes;
+}
+
+declare module '*.module.css' {
+  const classes: { [key: string]: string };
+  export default classes;
+}
+
+declare module '*.scss' {
+  const content: { [key: string]: string };
+  export default content;
+}
+
+declare module '*.css' {
+  const content: { [key: string]: string };
+  export default content;
+}
+
+import { StaticImageData } from 'next/image';
+
+declare module '*.png' {
+  const content: StaticImageData;
+  export default content;
+}
+
+declare module '*.jpg' {
+  const content: StaticImageData;
+  export default content;
+}
+
+declare module '*.jpeg' {
+  const content: StaticImageData;
+  export default content;
+}
+
+declare module '*.gif' {
+  const content: StaticImageData;
+  export default content;
+}
+
+declare module '*.svg' {
+  const content: StaticImageData;
+  export default content;
+}
+
+declare module '*.webp' {
+  const content: StaticImageData;
+  export default content;
+}
+
+declare module '*.ico' {
+  const content: StaticImageData;
+  export default content;
+}
