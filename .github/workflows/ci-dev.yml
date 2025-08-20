@@ -1,4 +1,4 @@
-name: CI/CD dev Branch
+name: CI/CD dev frontend
 
 on:
   push:
@@ -166,5 +166,4 @@ jobs:
     steps:
       - name: All checks passed
         run: |
-          echo "✅ Tous les contrôles qualité sont passés"
-          echo "🚀 Code prêt pour déploiement"
+          echo "✅ All tests and checks passed successfully!"
