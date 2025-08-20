@@ -1,3 +1,5 @@
+import { StaticImageData } from 'next/image';
+
 declare module '*.module.scss' {
   const classes: { [key: string]: string };
   export default classes;
@@ -17,8 +19,6 @@ declare module '*.css' {
   const content: { [key: string]: string };
   export default content;
 }
-
-import { StaticImageData } from 'next/image';
 
 declare module '*.png' {
   const content: StaticImageData;
