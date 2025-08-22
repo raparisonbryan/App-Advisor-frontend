@@ -7,7 +7,6 @@ import { searchOutils } from "@/services/OutilService";
 import { Outil } from "@/types/Outil";
 import { useRouter } from "next/navigation";
 import {Flex} from "@radix-ui/themes";
-import Image from "next/image";
 import Img from "@/components/Atoms/Img/Img";
 
 const SearchBar = () => {
