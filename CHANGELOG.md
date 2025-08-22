@@ -1,3 +1,15 @@
+# [1.2.0](https://github.com/raparisonbryan/App-Advisor-frontend/compare/v1.1.1...v1.2.0) (2025-08-22)
+
+
+### Bug Fixes
+
+* unused constant left in searchbar file ([797f53b](https://github.com/raparisonbryan/App-Advisor-frontend/commit/797f53bf5be4e3900edece1aaa4872e201c1b576))
+
+
+### Features
+
+* implement real-time search with dropdown and image display ([4aa68aa](https://github.com/raparisonbryan/App-Advisor-frontend/commit/4aa68aa3af5441ceb1a15cd06900b93b03f2ec3e))
+
 ## [1.1.1](https://github.com/raparisonbryan/App-Advisor-frontend/compare/v1.1.0...v1.1.1) (2025-08-20)
 
 
