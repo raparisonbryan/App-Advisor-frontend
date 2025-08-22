@@ -1,16 +1,93 @@
 @import "@/styles/index.scss";
 
-.form {
-    display: flex;
+.search_container {
+    position: relative;
     width: 100%;
-    gap: 10px;
+    max-width: 600px;
     background-color: rgb(243, 243, 243, .6);
     backdrop-filter: blur(10px);
     padding: 20px;
     border-radius: 6px;
+}
 
-    @media (max-width: 520px) {
+.loading_indicator {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 15px;
+    border-radius: 6px;
+    margin-top: 5px;
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 6px;
+    margin-top: 5px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    max-height: 400px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.dropdown_item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.outil_info {
+    flex: 1;
+    margin-right: 15px;
+}
+
+.outil_name {
+    font-weight: 600;
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.outil_description {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.4;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+    .search_container {
+        max-width: 100%;
+    }
+
+    .dropdown_item {
         flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
     }
 }
 
