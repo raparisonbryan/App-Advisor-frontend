@@ -62,4 +62,24 @@ export async function deleteOutil(id: string) {
         throw new Error(errorData.msg || "Erreur lors de la suppression de l'outil");
     }
     return await response.json();
+}
+
+export async function searchOutils(query: string): Promise<Outil[]> {
+    try {
+        
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/outils/search?q=${encodeURIComponent(query)}`);
+        if (response.ok) {
+            return await response.json();
+        }
+    } catch {
+        console.log('Endpoint de recherche non disponible, utilisation du filtrage côté client');
+    }
+    
+    const allOutils = await getOutils();
+    const searchTerm = query.toLowerCase();
+    
+    return allOutils.filter(outil => 
+        outil.name.toLowerCase().includes(searchTerm) ||
+        outil.description.toLowerCase().includes(searchTerm)
+    );
 } 
