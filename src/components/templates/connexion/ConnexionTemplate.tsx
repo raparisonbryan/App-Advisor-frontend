@@ -32,9 +32,8 @@ const ConnexionTemplate = () => {
         try {
             await login({ email, password });
             router.push('/');
-        } catch (error: any) {
-            console.error("Erreur de connexion: ", error);
-            setErrorMsg(error.message ?? 'Une erreur est survenue lors de la connexion');
+        } catch (error: unknown) {
+            setErrorMsg(error instanceof Error ? error.message : 'Une erreur est survenue lors de la connexion');
         }
     }
 

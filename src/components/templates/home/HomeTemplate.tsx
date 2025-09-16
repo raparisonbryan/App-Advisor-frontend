@@ -113,7 +113,7 @@ const HomeTemplate = () => {
                         </WrapperRow>
                     )}
 
-                    <Btn>Voir toutes les catégories</Btn>
+                    <Btn onClick={() => router.push('/categories')}>Voir toutes les catégories</Btn>
                 </Container>
             </div>
         </main>

@@ -59,7 +59,7 @@ export default function UsersTable() {
           setEditUser(null);
           setForm({ name: "", email: "", Admin: false });
         },
-        onError: (err: any) => setSubmitError(err.message),
+        onError: (err: Error) => setSubmitError(err.message),
       });
     }
   };

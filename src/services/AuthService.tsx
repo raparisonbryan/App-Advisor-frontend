@@ -27,8 +27,7 @@ export async function fetchCurrentUser() {
         const decoded: { userId: string } = jwtDecode(token);
         return { id: decoded.userId };
     } catch (error) {
-        console.error("Erreur de décodage du token:", error);
-        throw new Error("Session invalide");
+        throw new Error("Session invalide", { cause: error });
     }
 }
 
@@ -44,6 +43,9 @@ export async function loginUser(credentials: LoginCredentials) {
     });
 
     if (!response.ok) {
+        if (response.status === 429) {
+            throw new Error('Trop de tentatives de connexion. Veuillez patienter quelques minutes avant de réessayer.');
+        }
         const errorData = await response.json();
         throw new Error(errorData.msg || 'Une erreur est survenue lors de la connexion');
     }
@@ -65,6 +67,9 @@ export async function signupUser(credentials: SignupCredentials) {
     });
 
     if (!response.ok) {
+        if (response.status === 429) {
+            throw new Error('Trop de tentatives d\'inscription. Veuillez patienter quelques minutes avant de réessayer.');
+        }
         const errorData = await response.json();
         throw new Error(errorData.msg || "Une erreur est survenue lors de l'inscription");
     }
@@ -94,6 +99,9 @@ export async function forgotPassword(email: string) {
         body: JSON.stringify({ email }),
     });
     if (!response.ok) {
+        if (response.status === 429) {
+            throw new Error('Trop de tentatives de réinitialisation. Veuillez patienter quelques minutes avant de réessayer.');
+        }
         const errorData = await response.json();
         throw new Error(errorData.msg || "Erreur lors de l'envoi du mail de réinitialisation");
     }
@@ -109,6 +117,9 @@ export async function resetPassword({ token, password }: { token: string, passwo
         body: JSON.stringify({ password }),
     });
     if (!response.ok) {
+        if (response.status === 429) {
+            throw new Error('Trop de tentatives de réinitialisation. Veuillez patienter quelques minutes avant de réessayer.');
+        }
         const errorData = await response.json();
         throw new Error(errorData.msg || "Erreur lors de la réinitialisation du mot de passe");
     }
@@ -126,6 +137,21 @@ export async function getUserById(id: string) {
 
 export async function updateUserById({ id, user }: { id: string, user: Partial<{ name: string; email: string; Admin?: boolean }> }) {
     const response = await authFetch(`${process.env.NEXT_PUBLIC_API_URL}/user/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
+    });
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.msg || "Erreur lors de la mise à jour du profil utilisateur");
+    }
+    return await response.json();
+}
+
+export async function updateCurrentUser(user: Partial<{ name: string; email: string; Admin?: boolean }>) {
+    const response = await authFetch(`${process.env.NEXT_PUBLIC_API_URL}/user/me`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -214,9 +240,6 @@ async function authFetch(input: RequestInfo, init?: RequestInit) {
                 ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
             };
             response = await fetch(input, { ...init, headers });
-            if (response.status === 401) {
-               console.error("Token invalide ou expiré, redirection vers la page de connexion");
-            }
         } catch {
             Cookies.remove('token');
             if (typeof window !== 'undefined') {

@@ -35,7 +35,7 @@ export async function middleware(request: NextRequest) {
                 return NextResponse.redirect(url);
             }
         } catch (error) {
-            console.error('Erreur de vérification admin:', error);
+            console.error(error);
             const url = request.nextUrl.clone();
             url.pathname = '/connexion';
             return NextResponse.redirect(url);

@@ -71,7 +71,7 @@ export default function OutilsTable() {
           setEditOutil(null);
           setForm({ name: "", description: "", imageURL: "" });
         },
-        onError: (err: any) => setSubmitError(err.message),
+        onError: (err: Error) => setSubmitError(err.message),
       });
     } else {
       createMutation.mutate(form, {
@@ -79,7 +79,7 @@ export default function OutilsTable() {
           setShowModal(false);
           setForm({ name: "", description: "", imageURL: "" });
         },
-        onError: (err: any) => setSubmitError(err.message),
+        onError: (err: Error) => setSubmitError(err.message),
       });
     }
   };

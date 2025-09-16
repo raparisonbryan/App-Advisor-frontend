@@ -17,6 +17,8 @@ import {useRouter} from "next/navigation";
 import {useMutation} from "@tanstack/react-query";
 import {signupUser} from "@/services/AuthService";
 import {Flex} from "@radix-ui/themes";
+import Toast from "@/components/Atoms/Toast/Toast";
+import { useToast } from "@/hooks/useToast";
 
 const InscriptionTemplate = () => {
     const [name, setName] = useState('');
@@ -24,14 +26,17 @@ const InscriptionTemplate = () => {
     const [password, setPassword] = useState('');
     const [errorMsg, setErrorMsg] = useState('');
     const router = useRouter();
+    const { toast, showSuccess, hideToast } = useToast();
 
     const mutation = useMutation({
         mutationFn: signupUser,
         onSuccess: () => {
-            router.push('/connexion');
-            alert('Inscription réussie');
+            showSuccess('Inscription réussie !', 'Votre compte a été créé avec succès. Vous pouvez maintenant vous connecter.');
+            setTimeout(() => {
+                router.push('/connexion');
+            }, 2000); 
         },
-        onError: (error: any) => {
+        onError: (error: Error) => {
             setErrorMsg(error.message);
         },
     });
@@ -78,6 +83,14 @@ const InscriptionTemplate = () => {
             <Flex className={styles.img_wrapper} height="100%">
                 <Img src={bg} height="100%" width="100%" objectFit="cover"/>
             </Flex>
+            
+            <Toast
+                open={toast.open}
+                onOpenChange={hideToast}
+                title={toast.title}
+                description={toast.description}
+                type={toast.type}
+            />
         </main>
     )
 }

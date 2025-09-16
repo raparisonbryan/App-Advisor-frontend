@@ -12,6 +12,8 @@ import P from "@/components/Atoms/Paragraph/P";
 import ModalBtn from "@/components/Atoms/Button/ModalBtn";
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createAvis } from '@/services/AvisService';
+import Toast from "@/components/Atoms/Toast/Toast";
+import { useToast } from "@/hooks/useToast";
 
 interface ModalProps {
     children: React.ReactNode;
@@ -31,12 +33,19 @@ const Modal = ({ children, open, onOpenChange, outilId }: ModalProps) => {
     const token = Cookies.get('token');
     const router = useRouter();
     const queryClient = useQueryClient();
+    const { toast, showSuccess, showError, hideToast } = useToast();
+    
     const mutation = useMutation({
         mutationFn: createAvis,
         onSuccess: () => {
             resetForm();
             onOpenChange(false);
             queryClient.invalidateQueries({ queryKey: ['avis', outilId] });
+            queryClient.invalidateQueries({ queryKey: ['outil', outilId] });
+            showSuccess('Avis publié !', 'Votre avis a été ajouté avec succès.');
+        },
+        onError: (error: Error) => {
+            showError('Erreur', error.message || 'Une erreur est survenue lors de la publication de votre avis.');
         },
     });
 
@@ -62,8 +71,6 @@ const Modal = ({ children, open, onOpenChange, outilId }: ModalProps) => {
             case 'note':
                 setNote(newValue);
                 break;
-            default:
-                console.error(`Invalid Slider Name: ${name}`);
         }
     };
 
@@ -72,7 +79,13 @@ const Modal = ({ children, open, onOpenChange, outilId }: ModalProps) => {
         setSubmitLoading(true);
 
         if (!token) {
-            console.error("L'utilisateur n'est pas authentifié.");
+            showError('Erreur', 'Vous devez être connecté pour publier un avis.');
+            setSubmitLoading(false);
+            return;
+        }
+
+        if (!message.trim()) {
+            showError('Erreur', 'Veuillez saisir un message pour votre avis.');
             setSubmitLoading(false);
             return;
         }
@@ -169,6 +182,14 @@ const Modal = ({ children, open, onOpenChange, outilId }: ModalProps) => {
                     </Flex>
                 )}
             </Dialog.Content>
+            
+            <Toast
+                open={toast.open}
+                onOpenChange={hideToast}
+                title={toast.title}
+                description={toast.description}
+                type={toast.type}
+            />
         </Dialog.Root>
     );
 };

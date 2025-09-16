@@ -166,13 +166,13 @@ export const TestToolsIcon = ({ size = 48, color = "#ffffff" }) => (
     </svg>
 );
 
-export const getCategoryIcon = (categoryName: any, index: string | number) => {
+export const getCategoryIcon = (categoryName: string, index: string | number) => {
     const iconProps = {
         size: 96,
         color: "#ffffff"
     };
 
-    const iconMap: Record<string | number, React.ComponentType<any>> = {
+    const iconMap: Record<string | number, React.ComponentType<{ size: number; color: string }>> = {
         0: FrontEndIcon,
         1: BackEndIcon,
         2: SoftwareIcon,
