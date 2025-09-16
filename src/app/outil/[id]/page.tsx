@@ -21,7 +21,7 @@ import { useRouter } from "next/navigation";
 import SecondaryBtn from "@/components/Atoms/Button/SecondaryBtn";
 import Modal from "@/components/Molecules/Modal/Modal";
 import { useParams } from "next/navigation";
-import { Grid } from "@radix-ui/themes";
+import { Grid, Flex } from "@radix-ui/themes";
 import { useQuery } from '@tanstack/react-query';
 import { getOutilById } from '@/services/OutilService';
 import { fetchAvisByOutil } from '@/services/AvisService';
@@ -59,82 +59,86 @@ const OutilDetail = () => {
 
   return (
       <main className={styles.main}>
-        <Container paddingTop="100px" alignItems="center" justifyContent="space-between" height="100vh">
-          <Wrapper width="40%" gap="15px">
-            <div>
-              <H3 color="#DF6951">{outil.categories?.[0]?.name || "Catégorie"}</H3>
-              <WrapperRow alignItems="center" gap="10px">
-                <H1>{outil.name}</H1>
-                <Rating note={Math.round(outil.moyenneNote || 0)} starSize={25}/>
-                <P>({outil.nombreAvis || 0} avis)</P>
-              </WrapperRow>
-            </div>
-            <div>
-              <Elipse>{outil.description}</Elipse>
-              <Link style={{textDecoration: "underline"}} href={"#description"}>Voir plus</Link>
-            </div>
-            <Modal
-                open={isModalOpen}
-                onOpenChange={setIsModalOpen}
-                outilId={params.id}
-            >
-              <Btn onClick={() => setIsModalOpen(true)}>Donner un avis</Btn>
-            </Modal>
-          </Wrapper>
-          <WrapperRow width="50%" height="400px" alignItems="center" justifyContent="center">
-            <OutilImg>
-              <Img src={outil.imageURL} height="50%" width="100%" objectFit="scale-down"/>
-            </OutilImg>
-          </WrapperRow>
-        </Container>
-
-        <Container id="description" alignItems="center" justifyContent="space-between">
-          <Wrapper width="40%" gap="15px">
-            <H2>Description</H2>
-            <P>{outil?.description}</P>
-            <WrapperRow alignItems="center" gap="10px">
-              <Btn onClick={() => router.push("/classements")}>Classement</Btn>
+        <Container paddingTop="100px" height="100vh">
+          <Flex className={styles.flex} height="100%">
+            <Wrapper className={styles.header_text}>
+              <div>
+                <H3 color="#DF6951">{outil.categories?.[0]?.name || "Catégorie"}</H3>
+                <WrapperRow alignItems="center" gap="10px">
+                  <H1>{outil.name}</H1>
+                  <Rating note={Math.round(outil.moyenneNote || 0)} starSize={25}/>
+                  <P>({outil.nombreAvis || 0} avis)</P>
+                </WrapperRow>
+              </div>
+              <div>
+                <Elipse>{outil.description}</Elipse>
+                <Link style={{textDecoration: "underline"}} href={"#description"}>Voir plus</Link>
+              </div>
               <Modal
                   open={isModalOpen}
                   onOpenChange={setIsModalOpen}
                   outilId={params.id}
               >
-                <SecondaryBtn onClick={() => setIsModalOpen(true)}>Donner un avis</SecondaryBtn>
+                <Btn onClick={() => setIsModalOpen(true)}>Donner un avis</Btn>
               </Modal>
-            </WrapperRow>
-          </Wrapper>
-          <WrapperRow width="40%" alignItems="center" justifyContent="space-between">
-            <Wrapper justifyContent="center" alignItems="center" gap="10px">
-              <Pourcentage 
-                percentage={Math.round(outil.moyenneDifficulte || 0)} 
-                colorStart="#FF4098" 
-                colorEnd="#FFB47D"
-                showAsNote={true}
-                maxNote={20}
-              />
-              <P>Difficulté</P>
             </Wrapper>
-            <Wrapper justifyContent="center" alignItems="center" gap="10px">
-              <Pourcentage 
-                percentage={Math.round(outil.moyennePerformance || 0)} 
-                colorStart="#10E7FF" 
-                colorEnd="#8437FF"
-                showAsNote={true}
-                maxNote={20}
-              />
-              <P>Performance</P>
+            <Wrapper className={styles.outil_img}>
+              <OutilImg>
+                <Img src={outil.imageURL} height="50%" width="100%" objectFit="scale-down"/>
+              </OutilImg>
             </Wrapper>
-            <Wrapper justifyContent="center" alignItems="center" gap="10px">
-              <Pourcentage 
-                percentage={Math.round(outil.moyenneFlexibilite || 0)} 
-                colorStart="#D820F9" 
-                colorEnd="#7202FF"
-                showAsNote={true}
-                maxNote={20}
-              />
-              <P>Flexibilité</P>
+          </Flex>
+        </Container>
+
+        <Container paddingTop="100px" id="description" alignItems="center" justifyContent="space-between">
+          <Flex className={styles.description_flex}>
+            <Wrapper className={styles.description_text}>
+              <H2>Description</H2>
+              <P>{outil?.description}</P>
+              <WrapperRow alignItems="center" gap="10px">
+                <Btn onClick={() => router.push("/classements")}>Classement</Btn>
+                <Modal
+                    open={isModalOpen}
+                    onOpenChange={setIsModalOpen}
+                    outilId={params.id}
+                >
+                  <SecondaryBtn onClick={() => setIsModalOpen(true)}>Donner un avis</SecondaryBtn>
+                </Modal>
+              </WrapperRow>
             </Wrapper>
-          </WrapperRow>
+            <Flex className={styles.description_stats}>
+              <Wrapper justifyContent="center" alignItems="center" gap="10px">
+                <Pourcentage 
+                  percentage={Math.round(outil.moyenneDifficulte || 0)} 
+                  colorStart="#FF4098" 
+                  colorEnd="#FFB47D"
+                  showAsNote={true}
+                  maxNote={20}
+                />
+                <P>Difficulté</P>
+              </Wrapper>
+              <Wrapper justifyContent="center" alignItems="center" gap="10px">
+                <Pourcentage 
+                  percentage={Math.round(outil.moyennePerformance || 0)} 
+                  colorStart="#10E7FF" 
+                  colorEnd="#8437FF"
+                  showAsNote={true}
+                  maxNote={20}
+                />
+                <P>Performance</P>
+              </Wrapper>
+              <Wrapper justifyContent="center" alignItems="center" gap="10px">
+                <Pourcentage 
+                  percentage={Math.round(outil.moyenneFlexibilite || 0)} 
+                  colorStart="#D820F9" 
+                  colorEnd="#7202FF"
+                  showAsNote={true}
+                  maxNote={20}
+                />
+                <P>Flexibilité</P>
+              </Wrapper>
+            </Flex>
+          </Flex>
         </Container>
 
         <Container flexDirection="column" alignItems="center" paddingTop="100px" gap="50px">

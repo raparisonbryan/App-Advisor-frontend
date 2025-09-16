@@ -4,6 +4,66 @@
   padding-bottom: 150px;
 }
 
+.flex {
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+
+  @media (max-width: 768px) {
+    flex-direction: column-reverse;
+  }
+}
+
+.header_text {
+  width: 40%;
+  gap: 15px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}
+
+
+.outil_img {
+  width: 50%;
+  height: 400px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}
+
+.description_flex {
+  width: 100%;
+  gap: 15px;
+  align-items: center;
+  justify-content: space-between;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 50px;
+  }
+}
+
+.description_text {
+  width: 40%;
+  gap: 15px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}
+
+.description_stats {
+  width: 40%;
+  gap: 15px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
 .avis_wrapper {
   width: 100%;
 }
