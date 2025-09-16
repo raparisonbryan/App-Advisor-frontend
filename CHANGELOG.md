@@ -1,3 +1,11 @@
+## [1.2.1](https://github.com/raparisonbryan/App-Advisor-frontend/compare/v1.2.0...v1.2.1) (2025-09-16)
+
+
+### Bug Fixes
+
+* all any bugs ([97a5ad7](https://github.com/raparisonbryan/App-Advisor-frontend/commit/97a5ad781ed35d1069d089b99999f26bd0be7ef5))
+* all remaining bugs before show ([8420b21](https://github.com/raparisonbryan/App-Advisor-frontend/commit/8420b2183837f87757e1f3d44da1863f50aa397b))
+
 # [1.2.0](https://github.com/raparisonbryan/App-Advisor-frontend/compare/v1.1.1...v1.2.0) (2025-08-22)
 
 
