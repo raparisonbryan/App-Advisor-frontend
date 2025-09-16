@@ -35,7 +35,7 @@ const Profil = () => {
       showSuccess('Profil mis à jour !');
       refetch();
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       showError('Erreur', error.message || 'Erreur lors de la mise à jour du profil');
     },
   });

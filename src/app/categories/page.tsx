@@ -1,6 +1,7 @@
 'use client';
 
 import { Categorie } from "@/types/Categorie";
+import { Outil } from "@/types/Outil";
 import styles from "@/app/outils/page.module.scss";
 import Container from "@/components/Atoms/Container/Container";
 import H1 from "@/components/Atoms/Title/H1/H1";
@@ -61,7 +62,7 @@ const Categories = () => {
                             </div>
 
                             <WrapperRow gap="20px" className={styles.tools_wrapper}>
-                                {categorie.outils.map((outil: any, toolIndex: number) => (
+                                {categorie.outils.map((outil: Outil, toolIndex: number) => (
                                     <button
                                         key={outil._id}
                                         className={`${styles.tool_card} ${styles.slideIn}`}

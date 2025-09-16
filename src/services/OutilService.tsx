@@ -72,7 +72,7 @@ export async function searchOutils(query: string): Promise<Outil[]> {
             return await response.json();
         }
     } catch {
-        console.log('Endpoint de recherche non disponible, utilisation du filtrage côté client');
+        // Endpoint de recherche non disponible, utilisation du filtrage côté client
     }
     
     const allOutils = await getOutils();

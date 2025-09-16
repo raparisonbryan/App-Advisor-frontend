@@ -67,7 +67,7 @@ const Outils = () => {
           </Grid>
           
           {searchQuery && filteredOutils.length === 0 && (
-            <div>Aucun outil trouvé pour "{searchQuery}"</div>
+            <div>Aucun outil trouvé pour &quot;{searchQuery}&quot;</div>
           )}
         </Container>
       </main>

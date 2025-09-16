@@ -30,7 +30,7 @@ const ResetTemplate = () => {
         onSuccess: () => {
             setIsPwdReset(true);
         },
-        onError: (error: any) => {
+        onError: (error: Error) => {
             setErrorMsg(error.message);
         },
     });

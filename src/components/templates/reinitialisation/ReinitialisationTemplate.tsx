@@ -28,7 +28,7 @@ const ReinitialisationTemplate = () => {
         onSuccess: () => {
             setIsEmailSent(true);
         },
-        onError: (error: any) => {
+        onError: (error: Error) => {
             setErrorMsg(error.message);
         },
     });
