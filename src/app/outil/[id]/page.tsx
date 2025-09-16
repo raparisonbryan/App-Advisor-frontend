@@ -105,15 +105,33 @@ const OutilDetail = () => {
           </Wrapper>
           <WrapperRow width="40%" alignItems="center" justifyContent="space-between">
             <Wrapper justifyContent="center" alignItems="center" gap="10px">
-              <Pourcentage percentage={Math.round((outil.moyenneDifficulte || 0) * 20)} colorStart="#FF4098" colorEnd="#FFB47D"/>
+              <Pourcentage 
+                percentage={Math.round(outil.moyenneDifficulte || 0)} 
+                colorStart="#FF4098" 
+                colorEnd="#FFB47D"
+                showAsNote={true}
+                maxNote={20}
+              />
               <P>Difficulté</P>
             </Wrapper>
             <Wrapper justifyContent="center" alignItems="center" gap="10px">
-              <Pourcentage percentage={Math.round((outil.moyennePerformance || 0) * 20)} colorStart="#10E7FF" colorEnd="#8437FF"/>
+              <Pourcentage 
+                percentage={Math.round(outil.moyennePerformance || 0)} 
+                colorStart="#10E7FF" 
+                colorEnd="#8437FF"
+                showAsNote={true}
+                maxNote={20}
+              />
               <P>Performance</P>
             </Wrapper>
             <Wrapper justifyContent="center" alignItems="center" gap="10px">
-              <Pourcentage percentage={Math.round((outil.moyenneFlexibilite || 0) * 20)} colorStart="#D820F9" colorEnd="#7202FF"/>
+              <Pourcentage 
+                percentage={Math.round(outil.moyenneFlexibilite || 0)} 
+                colorStart="#D820F9" 
+                colorEnd="#7202FF"
+                showAsNote={true}
+                maxNote={20}
+              />
               <P>Flexibilité</P>
             </Wrapper>
           </WrapperRow>
@@ -122,19 +140,35 @@ const OutilDetail = () => {
         <Container flexDirection="column" alignItems="center" paddingTop="100px" gap="50px">
           <H2>Avis</H2>
           {isLoadingAvis ? <P>Chargement des avis...</P> : (
-            <Grid columns={{ initial: "1", sm: "2", lg: "3" }} gap="4" width="100%">
-              {avisAffiches.map((avis, index) => (
-                  <UserCard
-                      key={index}
-                      avis={avis.message}
-                      nomUtilisateur={avis.user.name}
-                      note={avis.note}
-                  />
-              ))}
-            </Grid>
-          )}
-          {!afficherTous && avisList.length > 3 && (
-              <Btn onClick={() => setAfficherTous(true)}>Voir plus</Btn>
+            avisList.length === 0 ? (
+              <Container flexDirection="column" alignItems="center" gap="20px">
+                <P>Aucun avis pour cet outil pour le moment.</P>
+                <P>Soyez le premier à donner votre avis !</P>
+                <Modal
+                    open={isModalOpen}
+                    onOpenChange={setIsModalOpen}
+                    outilId={params.id}
+                >
+                  <Btn onClick={() => setIsModalOpen(true)}>Donner un avis</Btn>
+                </Modal>
+              </Container>
+            ) : (
+              <>
+                <Grid columns={{ initial: "1", sm: "2", lg: "3" }} gap="4" width="100%">
+                  {avisAffiches.map((avis, index) => (
+                      <UserCard
+                          key={index}
+                          avis={avis.message}
+                          nomUtilisateur={avis.user.name}
+                          note={avis.note}
+                      />
+                  ))}
+                </Grid>
+                {!afficherTous && avisList.length > 3 && (
+                    <Btn onClick={() => setAfficherTous(true)}>Voir plus</Btn>
+                )}
+              </>
+            )
           )}
         </Container>
       </main>

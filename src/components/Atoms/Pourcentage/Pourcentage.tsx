@@ -5,13 +5,16 @@ interface PourcentageProps {
   percentage: number;
   colorStart: string;
   colorEnd: string;
+  showAsNote?: boolean;
+  maxNote?: number;
 }
 
 const Pourcentage = (props: PourcentageProps) => {
-  const { percentage, colorStart, colorEnd } = props;
+  const { percentage, colorStart, colorEnd, showAsNote = false, maxNote = 20 } = props;
   const radius = 50;
   const circumference = 2 * Math.PI * radius;
-  const progress = circumference - (percentage / 100) * circumference;
+  const arcPercentage = showAsNote ? (percentage / maxNote) * 100 : percentage;
+  const progress = circumference - (arcPercentage / 100) * circumference;
   const gradientId = useMemo(() => `gradient-${percentage}-${colorStart}-${colorEnd}`, [percentage, colorStart, colorEnd]);
 
   return (
@@ -44,7 +47,7 @@ const Pourcentage = (props: PourcentageProps) => {
         />
       </svg>
       <div className={styles.text}>
-        {percentage}%
+        {showAsNote ? `${percentage.toFixed(1)}` : `${percentage}%`}
       </div>
     </div>
   );

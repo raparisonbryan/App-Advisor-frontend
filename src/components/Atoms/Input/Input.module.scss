@@ -93,15 +93,15 @@
     width: 100%;
 	border: none;
 	outline: none;
-	border-bottom: .2em solid $darkblue;
+	border-bottom: .2em solid var(--text-color);
 	border-radius: .2em .2em 0 0;
 	padding: .4em;
     background: transparent;
-    color: $darkblue;
+    color: var(--text-color);
 }
 
 .search::placeholder {
-    color: rgba(0, 0, 0, 0.5);
+    color: var(--text-color);
 }
 
 .message {

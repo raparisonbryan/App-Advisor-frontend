@@ -11,28 +11,32 @@ import SecondaryBtn from "@/components/Atoms/Button/SecondaryBtn";
 import { useAuth } from "@/context/AuthContext";
 import {useParams, useRouter} from "next/navigation";
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { getUserById, updateUserById } from '@/services/AuthService';
+import { getUserById, updateCurrentUser } from '@/services/AuthService';
 import {Flex} from "@radix-ui/themes";
+import Toast from "@/components/Atoms/Toast/Toast";
+import { useToast } from "@/hooks/useToast";
 
 const Profil = () => {
   const params = useParams<{ id: string }>();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const router = useRouter();
+  const { toast, showSuccess, showError, hideToast } = useToast();
+  const userId = user?.id || params.id;
 
   const { data: userProfil, refetch } = useQuery({
-    queryKey: ['user', params.id],
-    queryFn: () => getUserById(params.id),
-    enabled: !!params.id,
+    queryKey: ['user', userId],
+    queryFn: () => getUserById(userId),
+    enabled: !!userId && !!user?.id, 
   });
 
   const mutation = useMutation({
-    mutationFn: (user: { name: string; email: string }) => updateUserById({ id: params.id, user }),
+    mutationFn: (user: { name: string; email: string }) => updateCurrentUser(user),
     onSuccess: () => {
-      alert('profil mis à jour avec succès!');
+      showSuccess('Profil mis à jour !');
       refetch();
     },
     onError: (error: any) => {
-      alert(error.message || 'Erreur lors de la mise à jour du profil');
+      showError('Erreur', error.message || 'Erreur lors de la mise à jour du profil');
     },
   });
 
@@ -51,6 +55,17 @@ const Profil = () => {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+    
+    if (!user?.id) {
+      showError('Erreur', 'Vous devez être connecté pour modifier votre profil.');
+      return;
+    }
+    
+    if (user?.id !== params.id) {
+      showError('Erreur', 'Vous ne pouvez modifier que votre propre profil.');
+      return;
+    }
+    
     mutation.mutate(form);
   };
 
@@ -92,6 +107,14 @@ const Profil = () => {
           </form>
         </div>
       </Container>
+      
+      <Toast
+        open={toast.open}
+        onOpenChange={hideToast}
+        title={toast.title}
+        description={toast.description}
+        type={toast.type}
+      />
     </main>
   );
 }

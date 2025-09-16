@@ -1,4 +1,4 @@
-import { Dialog, Button, Flex, TextField } from "@radix-ui/themes";
+import { Dialog, Button, Flex, TextField, Select } from "@radix-ui/themes";
 import ModalBtn from "@/components/Atoms/Button/ModalBtn";
 
 export interface CategoryModalProps {
@@ -15,6 +15,11 @@ export interface CategoryModalProps {
     confirmError: string | null;
     confirmText?: string;
     showInput?: boolean;
+    showSelect?: boolean;
+    selectValue?: string;
+    onSelectChange?: (value: string) => void;
+    selectOptions?: { value: string; label: string }[];
+    selectPlaceholder?: string;
 }
 
 const CategoryModal = ({
@@ -30,7 +35,12 @@ const CategoryModal = ({
                          confirmLoading,
                          confirmError,
                          confirmText = "Confirmer",
-                         showInput = false
+                         showInput = false,
+                         showSelect = false,
+                         selectValue,
+                         onSelectChange,
+                         selectOptions = [],
+                         selectPlaceholder = "Sélectionner..."
                      }: CategoryModalProps) => {
     return (
         <Dialog.Root open={open} onOpenChange={onOpenChange}>
@@ -51,6 +61,21 @@ const CategoryModal = ({
                             value={inputValue || ""}
                             onChange={(e) => onInputChange?.(e.target.value)}
                         />
+                    )}
+                    {showSelect && (
+                        <Select.Root
+                            value={selectValue || ""}
+                            onValueChange={onSelectChange}
+                        >
+                            <Select.Trigger placeholder={selectPlaceholder} />
+                            <Select.Content>
+                                {selectOptions.map((option) => (
+                                    <Select.Item key={option.value} value={option.value}>
+                                        {option.label}
+                                    </Select.Item>
+                                ))}
+                            </Select.Content>
+                        </Select.Root>
                     )}
                     {confirmError && <div style={{ color: 'red' }}>{confirmError}</div>}
                     <Flex gap="3" mt="4" justify="end">

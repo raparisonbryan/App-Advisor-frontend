@@ -40,15 +40,17 @@ export async function deleteCategory(catId: string) {
     return await response.json();
 }
 
-export async function addOutilToCategory(catId: string, outilId: string) {
+export async function addOutilToCategory(catId: string, outilId: string, existingOutilsIds: string[] = []) {
     const token = Cookies.get('token');
+    const newOutilsIds = [...existingOutilsIds, outilId];
+    
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories/${catId}/outils`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify({ outils: [outilId] }),
+        body: JSON.stringify({ outils: newOutilsIds }),
     });
     if (!response.ok) {
         const errorData = await response.json();
